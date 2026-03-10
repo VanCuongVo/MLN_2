@@ -193,7 +193,24 @@ function App() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>© 2026 - Tài liệu học tập Kinh tế chính trị Mác - Lênin</p>
+        <p className="footer-copy">© 2026 · Tài liệu học tập Kinh tế chính trị Mác - Lênin</p>
+        <div className="footer-ai-label">🤖 Hỗ trợ bởi AI</div>
+        <div className="footer-ai-row">
+          {[
+            { icon: '✦', name: 'Gemini', role: 'Soạn nội dung & outline bài thuyết trình', color: '#4285F4', bg: 'rgba(66,133,244,.12)', border: 'rgba(66,133,244,.3)' },
+            { icon: '◆', name: 'Claude', role: 'Lập trình giao diện & tối ưu code React', color: '#c98a5e', bg: 'rgba(201,138,94,.12)', border: 'rgba(201,138,94,.3)' },
+            { icon: '⬥', name: 'ChatGPT', role: 'Nghiên cứu ví dụ thực tế & số liệu', color: '#10a37f', bg: 'rgba(16,163,127,.12)', border: 'rgba(16,163,127,.3)' },
+            { icon: '✿', name: 'GitHub Copilot', role: 'Hỗ trợ viết & debug code trực tiếp', color: '#58a6ff', bg: 'rgba(88,166,255,.12)', border: 'rgba(88,166,255,.3)' },
+          ].map(ai => (
+            <div key={ai.name} className="footer-ai-chip" style={{ background: ai.bg, borderColor: ai.border }}>
+              <span className="footer-ai-icon" style={{ color: ai.color }}>{ai.icon}</span>
+              <div className="footer-ai-info">
+                <span className="footer-ai-name" style={{ color: ai.color }}>{ai.name}</span>
+                <span className="footer-ai-role">{ai.role}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </footer>
 
       {/* AI Chat */}
