@@ -1,0 +1,3111 @@
+import { useState, useEffect, useRef } from 'react'
+import './App.css'
+import {
+  Chart as ChartJS, CategoryScale, LinearScale, BarElement,
+  ArcElement, Title, Tooltip, Legend
+} from 'chart.js'
+import { Bar, Doughnut } from 'react-chartjs-2'
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend)
+
+function App() {
+  const [openMenu, setOpenMenu] = useState(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [activeModal, setActiveModal] = useState(null)
+  const [closingModal, setClosingModal] = useState(false)
+  const [quizOpen, setQuizOpen] = useState(false)
+  const [chartsOpen, setChartsOpen] = useState(false)
+  const [timelineOpen, setTimelineOpen] = useState(false)
+  const [flashcardsOpen, setFlashcardsOpen] = useState(false)
+  const [timerOpen, setTimerOpen] = useState(false)
+  const [slideshowOpen, setSlideshowOpen] = useState(false)
+
+  useEffect(() => {
+    document.body.style.overflow = activeModal ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [activeModal])
+
+  const openModal = (id) => {
+    setActiveModal(id)
+    setClosingModal(false)
+  }
+
+  const closeModal = () => {
+    setClosingModal(true)
+    setTimeout(() => {
+      setActiveModal(null)
+      setClosingModal(false)
+    }, 300)
+  }
+
+  const toggleMenu = (menuId) => {
+    setOpenMenu(openMenu === menuId ? null : menuId)
+  }
+
+  const menuStructure = [
+    { id: 'intro', title: '📚 Giới thiệu' },
+    {
+      id: 'doc-quyen',
+      title: '🏢 Biểu hiện mới của Độc quyền',
+      subItems: [
+        { id: 'tich-tu', title: 'a. Tích tụ & Tập trung tư bản' },
+        { id: 'tai-chinh', title: 'b. Tư bản tài chính' },
+        { id: 'xuat-khau', title: 'c. Xuất khẩu tư bản' },
+        { id: 'thi-truong', title: 'd. Phân chia thị trường' },
+        { id: 'lanh-tho', title: 'đ. Phân chia lãnh thổ' }
+      ]
+    },
+    {
+      id: 'doc-quyen-nn',
+      title: '🏛️ Độc quyền Nhà nước',
+      subItems: [
+        { id: 'nhan-su', title: 'a. Cơ chế quan hệ nhân sự' },
+        { id: 'so-huu-nn', title: 'b. Sở hữu nhà nước' },
+        { id: 'dieu-tiet', title: 'c. Vai trò công cụ điều tiết' }
+      ]
+    }
+  ]
+
+  return (
+    <div className="app">
+      {/* Sidebar Toggle Button */}
+      <button
+        className="sidebar-toggle-btn"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Mở menu"
+      >
+        {sidebarOpen ? '✕' : '☰'}
+      </button>
+
+      {/* Sidebar Overlay */}
+      {sidebarOpen && (
+        <button
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+          aria-label="Đóng menu"
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <span>📋 Mục lục</span>
+          <button className="sidebar-close-btn" onClick={() => setSidebarOpen(false)}>✕</button>
+        </div>
+        <nav className="sidebar-nav">
+          {menuStructure.map(menu => (
+            <div key={menu.id} className="sidebar-nav-item">
+              {menu.subItems ? (
+                <div className="sidebar-group">
+                  <button
+                    className="sidebar-btn sidebar-btn-group"
+                    onClick={() => toggleMenu(menu.id)}
+                  >
+                    <span>{menu.title}</span>
+                    <span className={`arrow ${openMenu === menu.id ? 'open' : ''}`}>▼</span>
+                  </button>
+                  {openMenu === menu.id && (
+                    <div className="sidebar-submenu">
+                      {menu.subItems.map(subItem => (
+                        <button
+                          key={subItem.id}
+                          className="sidebar-subitem"
+                          onClick={() => { openModal(subItem.id); setSidebarOpen(false) }}
+                        >
+                          {subItem.title}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  className="sidebar-btn"
+                  onClick={() => { openModal(menu.id); setSidebarOpen(false) }}
+                >
+                  {menu.title}
+                </button>
+              )}
+            </div>
+          ))}
+        </nav>
+        <div className="sidebar-quiz-wrap">
+          <button
+            className="sidebar-quiz-btn"
+            onClick={() => { setQuizOpen(true); setSidebarOpen(false) }}
+          >
+            🎯 Kiểm tra kiến thức
+          </button>
+        </div>
+      </aside>
+
+      {/* Header */}
+      <header className="header">
+        <div className="header-main">
+          <h1>🏛️ Biểu hiện mới của Độc quyền</h1>
+          <p className="subtitle">Chủ nghĩa Tư bản Độc quyền trong Thế kỷ XXI</p>
+        </div>
+        <div className="header-tools">
+          <button className="h-tool-btn" onClick={() => globalThis.print()} title="Xuất PDF / In">🖨️ PDF</button>
+          <button className={`h-tool-btn ${timerOpen ? 'active' : ''}`} onClick={() => setTimerOpen(t => !t)} title="Đồng hồ đếm ngược">⏱ Timer</button>
+          <button className="h-tool-btn primary" onClick={() => setSlideshowOpen(true)} title="Chế độ Slideshow">▶ Slideshow</button>
+        </div>
+      </header>
+
+      {/* Cards Grid */}
+      <main className="content sections-overview">
+        {SECTIONS.slice(0, 6).map(s => (
+          <SectionCard key={s.id} {...s} onClick={() => openModal(s.id)} />
+        ))}
+
+        <div className="section-divider">
+          <span>🏛️ Độc quyền Nhà nước</span>
+        </div>
+
+        {SECTIONS.slice(6).map(s => (
+          <SectionCard key={s.id} {...s} onClick={() => openModal(s.id)} />
+        ))}
+        <button className="quiz-banner-card" onClick={() => setQuizOpen(true)}>
+          <span className="quiz-banner-icon">🎯</span>
+          <div className="quiz-banner-info">
+            <div className="quiz-banner-title">Kiểm tra kiến thức</div>
+            <div className="quiz-banner-desc">10 câu hỏi về Kinh tế chính trị Mác-Lênin</div>
+          </div>
+          <span className="quiz-banner-cta">Bắt đầu →</span>
+        </button>
+
+        {/* Tools row */}
+        <div className="tools-row">
+          {[
+            { icon: '📊', title: 'Biểu đồ dữ liệu', sub: 'FDI, OPEC, thị phần', color: '#1565c0', bg: '#dbeafe', onClick: () => setChartsOpen(true) },
+            { icon: '⏳', title: 'Timeline Lịch sử', sub: '1860s → 2020s', color: '#b45309', bg: '#fde68a', onClick: () => setTimelineOpen(true) },
+            { icon: '🃏', title: 'Flashcard', sub: '10 thuật ngữ quan trọng', color: '#6d28d9', bg: '#ddd6fe', onClick: () => setFlashcardsOpen(true) },
+          ].map(t => (
+            <button key={t.title} className="tool-card" onClick={t.onClick}>
+              <span className="tool-card-icon" style={{ background: t.bg, color: t.color }}>{t.icon}</span>
+              <div className="tool-card-info">
+                <div className="tool-card-title" style={{ color: t.color }}>{t.title}</div>
+                <div className="tool-card-sub">{t.sub}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="footer">
+        <p>© 2026 - Tài liệu học tập Kinh tế chính trị Mác - Lênin</p>
+      </footer>
+
+      {/* AI Chat */}
+      <AiChat />
+
+      {/* Modal */}
+      {activeModal && (
+        <Modal
+          section={SECTIONS.find(s => s.id === activeModal)}
+          isClosing={closingModal}
+          onClose={closeModal}
+        />
+      )}
+
+      {/* Quiz */}
+      {quizOpen && <QuizModal onClose={() => setQuizOpen(false)} />}
+      {chartsOpen && <DataChartsModal onClose={() => setChartsOpen(false)} />}
+      {timelineOpen && <TimelineModal onClose={() => setTimelineOpen(false)} />}
+      {flashcardsOpen && <FlashcardsModal onClose={() => setFlashcardsOpen(false)} />}
+
+      {/* Timer widget */}
+      {timerOpen && <CountdownTimer onClose={() => setTimerOpen(false)} />}
+
+      {/* Slideshow */}
+      {slideshowOpen && <SlideshowMode sections={SECTIONS} onClose={() => setSlideshowOpen(false)} />}
+    </div>
+  )
+}
+
+// Sections data
+const SECTIONS = [
+  { id: 'intro', icon: '📚', title: 'Tổng quan về Độc quyền mới', desc: 'Khái niệm cốt lõi, 5 biểu hiện và đặc điểm thời đại mới', color: '#1565c0', colorBg: '#dbeafe', Component: IntroSection },
+  { id: 'tich-tu', icon: '🏢', title: 'Tích tụ & Tập trung Tư bản', desc: 'Concern, Conglomerate và vai trò doanh nghiệp vừa và nhỏ', color: '#0f766e', colorBg: '#ccfbf1', Component: TichTuSection },
+  { id: 'tai-chinh', icon: '💰', title: 'Tư bản Tài chính', desc: 'Mở rộng liên kết, cơ chế tham dự và ngân hàng xuyên quốc gia', color: '#9333ea', colorBg: '#ede9fe', Component: TaiChinhSection },
+  { id: 'xuat-khau', icon: '🌍', title: 'Xuất khẩu Tư bản', desc: 'Thay đổi dòng chảy, chủ thể và đa dạng hóa hình thức xuất khẩu', color: '#b45309', colorBg: '#fde68a', Component: XuatKhauSection },
+  { id: 'thi-truong', icon: '🗺️', title: 'Phân chia Thị trường Thế giới', desc: 'TNCs, liên minh kinh tế khu vực và cạnh tranh giữa các khối', color: '#0369a1', colorBg: '#bae6fd', Component: ThiTruongSection },
+  { id: 'lanh-tho', icon: '⚔️', title: 'Phân chia Lãnh thổ Ảnh hưởng', desc: 'Biên giới mềm, các hình thức chiến tranh mới và nguy cơ chiến tranh lạnh', color: '#b91c1c', colorBg: '#fecaca', Component: LanhThoSection },
+  { id: 'nhan-su', icon: '🏛️', title: 'Cơ chế Quan hệ Nhân sự', desc: 'Thể chế đa nguyên, thế lực trung dung và bản chất giai cấp', color: '#1d4ed8', colorBg: '#bfdbfe', Component: NhanSuSection },
+  { id: 'so-huu-nn', icon: '🏦', title: 'Sở hữu Nhà nước', desc: 'Ngân sách, cổ phần nhà nước, đầu tư hạ tầng và giải cứu tập đoàn', color: '#047857', colorBg: '#a7f3d0', Component: SoHuuNNSection },
+  { id: 'dieu-tiet', icon: '🎛️', title: 'Vai trò Công cụ Điều tiết Kinh tế', desc: 'Điều tiết vĩ mô, đa nguyên tư sản và viện trợ nước ngoài', color: '#6d28d9', colorBg: '#ddd6fe', Component: DieuTietSection },
+]
+
+// Section Card — click to open modal
+function SectionCard({ id, icon, title, desc, color, colorBg, onClick }) {
+  return (
+    <div
+      id={id}
+      className="expandable-section"
+      style={{ '--c': color, '--c-bg': colorBg }}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onClick()}
+    >
+      <div className="section-card-header">
+        <div className="section-card-left">
+          <span className="section-card-icon">{icon}</span>
+          <div className="section-card-info">
+            <div className="section-card-title">{title}</div>
+            <div className="section-card-desc">{desc}</div>
+          </div>
+        </div>
+        <span className="section-card-arrow">›</span>
+      </div>
+    </div>
+  )
+}
+
+// Modal
+function Modal({ section, isClosing, onClose }) {
+  const { icon, title, color, colorBg, Component } = section
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    globalThis.addEventListener('keydown', onKey)
+    return () => globalThis.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div
+      className={`modal-overlay${isClosing ? ' closing' : ''}`}
+      onClick={onClose}
+    >
+      <div
+        className={`modal-box${isClosing ? ' closing' : ''}`}
+        onClick={e => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
+        <div
+          className="modal-header"
+          style={{ background: `linear-gradient(135deg, ${color} 0%, #0d1b2a 100%)` }}
+        >
+          <div className="modal-header-left">
+            <span className="modal-icon" style={{ background: colorBg }}>{icon}</span>
+            <span className="modal-title">{title}</span>
+          </div>
+          <button className="modal-close" onClick={onClose} aria-label="Đóng">✕</button>
+        </div>
+        <div className="modal-body">
+          <Component />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Quiz ──────────────────────────────────────────────
+const QUIZ_QUESTIONS = [
+  {
+    q: 'Độc quyền trong kinh tế học Mác-Lênin được định nghĩa là gì?',
+    opts: [
+      'Nhà nước kiểm soát toàn bộ nền kinh tế',
+      'Sự tập trung sản xuất và tư bản đến mức chi phối nền kinh tế',
+      'Một doanh nghiệp duy nhất hoạt động trong thị trường',
+      'Liên minh các quốc gia kiểm soát thương mại quốc tế',
+    ],
+    ans: 1,
+    explain: 'Độc quyền là sự tập trung sản xuất và tư bản đến một mức độ nhất định, tạo ra sức mạnh chi phối và thống trị thị trường.',
+  },
+  {
+    q: 'Hình thức tổ chức độc quyền nào kết hợp nhiều ngành kinh doanh khác nhau dưới một tập đoàn mẹ?',
+    opts: ['Cartel', 'Syndicate', 'Trust', 'Conglomerate'],
+    ans: 3,
+    explain: 'Conglomerate (tập đoàn đa ngành) hợp nhất nhiều công ty thuộc các ngành khác nhau, giảm rủi ro và tận dụng sức mạnh tài chính chung.',
+  },
+  {
+    q: 'Tư bản tài chính là sản phẩm của sự hợp nhất giữa:',
+    opts: [
+      'Tư bản thương mại và tư bản công nghiệp',
+      'Tư bản ngân hàng và tư bản công nghiệp độc quyền',
+      'Nhà nước và tư bản nước ngoài',
+      'Tư bản nông nghiệp và tư bản thương mại',
+    ],
+    ans: 1,
+    explain: 'Tư bản tài chính hình thành từ sự hợp nhất của tư bản ngân hàng độc quyền và tư bản công nghiệp độc quyền, tạo ra tầng lớp tài phiệt.',
+  },
+  {
+    q: '"Cơ chế tham dự" trong tư bản tài chính có nghĩa là gì?',
+    opts: [
+      'Nhà nước tham gia điều tiết thị trường tài chính',
+      'Công ty mẹ nắm cổ phần chi phối nhiều công ty con, cháu',
+      'Các ngân hàng cho vay vốn với lãi suất thấp',
+      'Nhà đầu tư nhỏ lẻ tham gia thị trường chứng khoán',
+    ],
+    ans: 1,
+    explain: 'Cơ chế tham dự: tập đoàn mẹ nắm cổ phần kiểm soát công ty con, công ty con lại nắm ở công ty cháu — tạo mạng lưới kiểm soát cực rộng với ít vốn.',
+  },
+  {
+    q: 'Xuất khẩu tư bản khác với xuất khẩu hàng hóa ở điểm cơ bản nào?',
+    opts: [
+      'Xuất khẩu tư bản chỉ xảy ra giữa các nước phát triển',
+      'Xuất khẩu tư bản đưa giá trị ra nước ngoài để thu giá trị thặng dư tại đó',
+      'Xuất khẩu tư bản không mang lại lợi nhuận',
+      'Xuất khẩu hàng hóa phức tạp hơn xuất khẩu tư bản',
+    ],
+    ans: 1,
+    explain: 'Xuất khẩu tư bản là đưa tư bản ra nước ngoài để sản xuất, khai thác lao động rẻ và tài nguyên, thu giá trị thặng dư tại nước nhận đầu tư.',
+  },
+  {
+    q: 'Tổ chức nào là ví dụ điển hình của việc phân chia thị trường thế giới?',
+    opts: [
+      'Liên hợp quốc (UN)',
+      'Tổ chức Y tế Thế giới (WHO)',
+      'OPEC — Tổ chức các nước xuất khẩu dầu mỏ',
+      'UNESCO',
+    ],
+    ans: 2,
+    explain: 'OPEC là liên minh độc quyền quốc tế điển hình, phân chia và kiểm soát thị trường dầu mỏ toàn cầu thông qua hạn ngạch sản xuất.',
+  },
+  {
+    q: 'Độc quyền nhà nước tư bản chủ nghĩa về bản chất phục vụ lợi ích của ai?',
+    opts: [
+      'Toàn bộ nhân dân lao động',
+      'Nhà nước và bộ máy quan chức',
+      'Giai cấp tư sản độc quyền',
+      'Các tổ chức quốc tế',
+    ],
+    ans: 2,
+    explain: 'Dù có vẻ vì lợi ích chung, độc quyền nhà nước TBCN về bản chất phục vụ giai cấp tư sản độc quyền — nhà nước là công cụ của giai cấp thống trị.',
+  },
+  {
+    q: '"Cửa quay" (revolving door) trong cơ chế quan hệ nhân sự là gì?',
+    opts: [
+      'Chính sách mở cửa thị trường thương mại tự do',
+      'Sự luân chuyển nhân sự giữa tập đoàn tư nhân và bộ máy nhà nước',
+      'Hệ thống bầu cử đa đảng ở các nước tư bản',
+      'Cơ chế nhập khẩu lao động nước ngoài',
+    ],
+    ans: 1,
+    explain: 'Revolving door: lãnh đạo tập đoàn lớn luân phiên đảm nhận chức vụ nhà nước và ngược lại, đảm bảo lợi ích tư bản độc quyền luôn được bảo vệ.',
+  },
+  {
+    q: 'Quỹ đầu tư quốc gia (Sovereign Wealth Fund) thuộc hình thức nào?',
+    opts: [
+      'Xuất khẩu tư bản tư nhân',
+      'Sở hữu nhà nước trong độc quyền nhà nước',
+      'Tư bản tài chính tư nhân',
+      'Viện trợ phát triển quốc tế ODA',
+    ],
+    ans: 1,
+    explain: 'SWF (như Temasek Singapore, GIC của Abu Dhabi) là hình thức sở hữu nhà nước trực tiếp đầu tư vào tài sản sinh lời toàn cầu.',
+  },
+  {
+    q: 'Viện trợ nước ngoài (ODA) trong CNTB độc quyền nhà nước thực chất là:',
+    opts: [
+      'Hành động nhân đạo thuần túy không có lợi ích kinh tế',
+      'Công cụ điều tiết kinh tế và mở rộng ảnh hưởng địa chính trị',
+      'Hình thức bồi thường chiến tranh của các nước giàu',
+      'Chính sách xóa nợ cho các nước nghèo',
+    ],
+    ans: 1,
+    explain: 'ODA thực chất là công cụ của độc quyền nhà nước: kèm điều kiện mở cửa thị trường, ưu đãi doanh nghiệp nước viện trợ, phục vụ lợi ích địa chính trị.',
+  },
+]
+
+// ── Sound Effects (Web Audio API) ──────────────────
+function playSound(type) {
+  try {
+    const AudioCtx = globalThis.AudioContext || globalThis.webkitAudioContext
+    if (!AudioCtx) return
+    const ctx = new AudioCtx()
+    const gain = ctx.createGain()
+    gain.connect(ctx.destination)
+    if (type === 'correct') {
+      [523.25, 659.25, 783.99].forEach((freq, i) => {
+        const osc = ctx.createOscillator()
+        osc.connect(gain)
+        osc.type = 'sine'
+        osc.frequency.value = freq
+        osc.start(ctx.currentTime + i * 0.13)
+        osc.stop(ctx.currentTime + i * 0.13 + 0.18)
+      })
+      gain.gain.setValueAtTime(0.22, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.65)
+    } else {
+      const osc = ctx.createOscillator()
+      osc.connect(gain)
+      osc.type = 'sawtooth'
+      osc.frequency.setValueAtTime(280, ctx.currentTime)
+      osc.frequency.exponentialRampToValueAtTime(130, ctx.currentTime + 0.35)
+      gain.gain.setValueAtTime(0.22, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45)
+      osc.start(ctx.currentTime)
+      osc.stop(ctx.currentTime + 0.45)
+    }
+    setTimeout(() => ctx.close(), 1500)
+  } catch (err) {
+    console.debug('Audio playback not available:', err)
+  }
+}
+
+const STUDENTS = [
+  { emoji: '👦', name: 'Minh' },
+  { emoji: '👧', name: 'Lan' },
+  { emoji: '🧒', name: 'Tuấn' },
+  { emoji: '👩', name: 'Hoa' },
+]
+
+function shuffle(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+function QuizModal({ onClose }) {
+  const [step, setStep] = useState('start')
+  const [questions, setQuestions] = useState([])
+  const [current, setCurrent] = useState(0)
+  // phase: 'inviting' → students raise hands | 'answered' → reveal
+  const [phase, setPhase] = useState('inviting')
+  const [selected, setSelected] = useState(null)
+  const [correct, setCorrect] = useState(0)
+  const [streak, setStreak] = useState(0)
+  const [shake, setShake] = useState(false)
+  const [handStates, setHandStates] = useState([false, false, false, false])
+  const handTimersRef = useRef([])
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    globalThis.addEventListener('keydown', onKey)
+    return () => globalThis.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  // Raise hands staggered on each new question
+  useEffect(() => {
+    if (step !== 'playing' || phase === 'answered') return
+    setHandStates([false, false, false, false])
+    handTimersRef.current.forEach(clearTimeout)
+    handTimersRef.current = []
+    const order = shuffle([0, 1, 2, 3])
+    order.forEach((idx, rank) => {
+      const delay = 250 + rank * (180 + Math.random() * 380)
+      const t = setTimeout(() => {
+        setHandStates(prev => { const next = [...prev]; next[idx] = true; return next })
+      }, delay)
+      handTimersRef.current.push(t)
+    })
+    return () => handTimersRef.current.forEach(clearTimeout)
+  }, [current, step])
+
+  const handleStart = () => {
+    const q = shuffle(QUIZ_QUESTIONS)
+    setQuestions(q)
+    setCurrent(0)
+    setPhase('inviting')
+    setSelected(null)
+    setCorrect(0)
+    setStreak(0)
+    setHandStates([false, false, false, false])
+    setStep('playing')
+  }
+
+  const triggerShake = () => {
+    setShake(true)
+    setTimeout(() => setShake(false), 500)
+  }
+
+  const handleSelect = (idx) => {
+    if (phase !== 'inviting') return
+    handTimersRef.current.forEach(clearTimeout)
+    setHandStates([false, false, false, false])
+    setSelected(idx)
+    setPhase('answered')
+    const q = questions[current]
+    if (idx === q.ans) {
+      setCorrect(c => c + 1)
+      setStreak(s => s + 1)
+      playSound('correct')
+    } else {
+      setStreak(0)
+      playSound('wrong')
+      triggerShake()
+    }
+  }
+
+  const goNext = () => {
+    const nextIdx = current + 1
+    if (nextIdx >= questions.length) {
+      setStep('result')
+    } else {
+      setCurrent(nextIdx)
+      setPhase('inviting')
+      setSelected(null)
+      setHandStates([false, false, false, false])
+    }
+  }
+
+  const q = questions[current] || QUIZ_QUESTIONS[0]
+  const total = questions.length || QUIZ_QUESTIONS.length
+  const progressPct = ((current + (phase === 'answered' ? 1 : 0)) / total) * 100
+  const isCorrect = selected !== null && selected === q.ans
+
+  const presenterSpeech =
+    phase === 'inviting'
+      ? `Câu ${current + 1}: "${q.q}" — Mời các bạn giơ tay! 🙋`
+      : isCorrect
+        ? `Chính xác! Bạn ${STUDENTS[selected]?.name} trả lời đúng rồi! Cả lớp vỗ tay nào 👏`
+        : `Chưa đúng rồi bạn ơi! Đáp án đúng là đáp án ${String.fromCodePoint(65 + q.ans)}. Xem giải thích bên dưới nhé 📚`
+
+  const getRank = () => {
+    const pct = correct / total
+    if (pct >= 0.9) return { emoji: '🏆', title: 'Thiên tài!', msg: 'Bạn xứng đáng điểm A+ môn Kinh tế chính trị!' }
+    if (pct >= 0.7) return { emoji: '🥇', title: 'Xuất sắc!', msg: 'Nắm vững kiến thức Mác-Lênin rất tốt!' }
+    if (pct >= 0.5) return { emoji: '🥈', title: 'Khá tốt!', msg: 'Ôn lại một số phần để đạt điểm cao hơn nhé.' }
+    if (pct >= 0.3) return { emoji: '🥉', title: 'Cố gắng!', msg: 'Xem lại nội dung bài học và thử lại!' }
+    return { emoji: '📚', title: 'Cần ôn thêm!', msg: 'Hãy đọc kỹ tài liệu trước khi làm quiz nhé!' }
+  }
+  const rank = getRank()
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className={`modal-box quiz-box${shake ? ' quiz-shake' : ''}`} onClick={e => e.stopPropagation()}>
+
+        {/* ── Start ── */}
+        {step === 'start' && (
+          <div className="quiz-start">
+            <div className="quiz-start-icon">👨‍🏫</div>
+            <h2>Giờ kiểm tra kiến thức</h2>
+            <p>{QUIZ_QUESTIONS.length} câu hỏi · Kinh tế Chính trị Mác-Lênin</p>
+            <div className="quiz-rules">
+              <div className="quiz-rule-item"><span>👨‍🏫</span> Giáo viên đọc từng câu hỏi</div>
+              <div className="quiz-rule-item"><span>🙋</span> Bấm "Mời trả lời" để học sinh giơ tay</div>
+              <div className="quiz-rule-item"><span>👆</span> Bấm vào học sinh để chọn câu trả lời</div>
+            </div>
+            <div className="quiz-start-btns">
+              <button className="quiz-btn-primary" onClick={handleStart}>▶ Bắt đầu</button>
+              <button className="quiz-btn-ghost" onClick={onClose}>Hủy</button>
+            </div>
+          </div>
+        )}
+
+        {/* ── Playing ── */}
+        {step === 'playing' && (
+          <>
+            {/* Top bar */}
+            <div className="quiz-header">
+              <div className="quiz-q-counter">Câu {current + 1} / {total}</div>
+              <div className="quiz-progress-bar">
+                <div className="quiz-progress-fill" style={{ width: `${progressPct}%` }} />
+              </div>
+              <div className="quiz-score-inline">✅ {correct}</div>
+              <button className="modal-close" onClick={onClose} aria-label="Đóng">✕</button>
+            </div>
+
+            {/* Streak badge */}
+            {streak >= 2 && phase === 'inviting' && (
+              <div className="quiz-streak-badge">🔥 {streak} liên tiếp đúng!</div>
+            )}
+
+            <div className="quiz-body">
+              {/* Presenter teacher */}
+              <div className="presenter-row">
+                <div className="presenter-avatar">👨‍🏫</div>
+                <div className={`presenter-bubble phase-${phase}`}>{presenterSpeech}</div>
+              </div>
+
+              {/* Classroom */}
+              {(
+                <div className="classroom-row">
+                  {q.opts.map((opt, i) => {
+                    const st = STUDENTS[i]
+                    const isAnswered = phase === 'answered'
+                    const isCorrectOpt = isAnswered && i === q.ans
+                    const isWrongOpt = isAnswered && i === selected && i !== q.ans
+                    let stState = handStates[i] && !isAnswered ? 'raised' : 'idle'
+                    if (isCorrectOpt) stState = 'correct'
+                    if (isWrongOpt) stState = 'wrong'
+                    return (
+                      <button
+                        key={`student-${current}-${i}`}
+                        className={`student-desk st-${stState}`}
+                        onClick={() => handleSelect(i)}
+                        disabled={isAnswered}
+                      >
+                        <div className="student-bubble">
+                          <span className="student-opt-letter">{String.fromCodePoint(65 + i)}</span>
+                          {opt}
+                        </div>
+                        <div className="student-figure">
+                          <div className={`student-arm${handStates[i] && !isAnswered ? ' up' : ''}`}>🤚</div>
+                          <div className="student-body">{st.emoji}</div>
+                        </div>
+                        {isCorrectOpt && <div className="student-stars">⭐</div>}
+                        {isWrongOpt && <div className="student-sad">😢</div>}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+
+              {phase === 'answered' && (
+                <div className={`quiz-explain ${isCorrect ? 'correct' : 'wrong'}`}>
+                  <strong>
+                    {isCorrect ? '✅ Chính xác!' : '❌ Chưa đúng!'}
+                  </strong>
+                  <p>{q.explain}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="quiz-footer">
+              {phase === 'answered' && (
+                <button className="quiz-btn-primary" onClick={goNext}>
+                  {current + 1 >= total ? 'Xem kết quả 🎉' : 'Câu tiếp →'}
+                </button>
+              )}
+            </div>
+          </>
+        )}
+
+        {/* ── Result ── */}
+        {step === 'result' && (
+          <div className="quiz-result">
+            <div className="quiz-result-emoji">{rank.emoji}</div>
+            <h2>{rank.title}</h2>
+            <div className="quiz-score-big">
+              <span className="quiz-score-num">{correct}</span>
+              <span className="quiz-score-total">/ {total}</span>
+            </div>
+            <div className="quiz-result-stats">
+              <div className="quiz-stat">
+                <span className="quiz-stat-val">{correct}</span>
+                <span className="quiz-stat-lbl">câu đúng</span>
+              </div>
+              <div className="quiz-stat">
+                <span className="quiz-stat-val">{total - correct}</span>
+                <span className="quiz-stat-lbl">câu sai</span>
+              </div>
+              <div className="quiz-stat">
+                <span className="quiz-stat-val">{Math.round(correct / total * 100)}%</span>
+                <span className="quiz-stat-lbl">tỉ lệ đúng</span>
+              </div>
+            </div>
+            <p className="quiz-result-msg">{rank.msg}</p>
+            <div className="quiz-result-btns">
+              <button className="quiz-btn-primary" onClick={handleStart}>🔄 Chơi lại</button>
+              <button className="quiz-btn-ghost" onClick={onClose}>Đóng</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Reusable Image Gallery ────────────────────────────
+function ImageGallery({ title, items }) {
+  const [failed, setFailed] = useState({})
+
+  return (
+    <div className="gallery-wrap">
+      {title && <div className="carousel-title">{title}</div>}
+      <div className="gallery-grid">
+        {items.map((item, i) => (
+          <div key={i} className="gallery-item">
+            <div className="gallery-img-wrap">
+              {failed[i] ? (
+                <div className="carousel-fallback">{item.emoji ?? '🏢'}</div>
+              ) : (
+                <img
+                  src={item.src}
+                  alt={item.label}
+                  className="carousel-img"
+                  onError={() => setFailed(p => ({ ...p, [i]: true }))}
+                  loading="lazy"
+                />
+              )}
+            </div>
+            <span className="carousel-label">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Intro Section
+function IntroSection() {
+  return (
+    <div className="section">
+      <h2>📚 Tổng quan về Độc quyền mới</h2>
+
+      <ImageGallery
+        title="🌎 Các tập đoàn độc quyền hàng đầu thế giới"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/320px-Google_2015_logo.svg.png', label: 'Google / Alphabet', emoji: '🔍' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/320px-Amazon_logo.svg.png', label: 'Amazon', emoji: '📦' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/320px-Microsoft_logo.svg.png', label: 'Microsoft', emoji: '💻' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/320px-Netflix_2015_logo.svg.png', label: 'Netflix', emoji: '🎥' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Above_Gotham.png/240px-Above_Gotham.png', label: 'NYC Finance Hub', emoji: '🏙️' },
+        ]}
+      />
+
+      <div className="card highlight">
+        <h3>🎯 Khái niệm cốt lõi</h3>
+        <p>
+          Độc quyền là sự tập trung sản xuất và tư bản đến mức độ cao, tạo ra các tổ chức
+          kinh tế có sức mạnh chi phối thị trường và nền kinh tế. Trong điều kiện hiện đại,
+          độc quyền có những biểu hiện mới phản ánh sự phát triển của lực lượng sản xuất
+          và khoa học công nghệ.
+        </p>
+      </div>
+
+      <div className="card-grid">
+        <div className="card">
+          <h3>🔍 5 Biểu hiện chính</h3>
+          <ul className="feature-list">
+            <li>✅ Tích tụ và tập trung tư bản</li>
+            <li>✅ Vai trò tư bản tài chính</li>
+            <li>✅ Xuất khẩu tư bản</li>
+            <li>✅ Phân chia thị trường thế giới</li>
+            <li>✅ Phân chia lãnh thổ ảnh hưởng</li>
+          </ul>
+        </div>
+
+        <div className="card">
+          <h3>📊 Đặc điểm thời đại mới</h3>
+          <ul className="feature-list">
+            <li>🌐 Toàn cầu hóa kinh tế</li>
+            <li>💻 Cách mạng khoa học công nghệ</li>
+            <li>🏢 Công ty xuyên quốc gia (TNCs)</li>
+            <li>🤝 Liên minh kinh tế khu vực</li>
+            <li>📱 Nền kinh tế số</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Tích tụ Section
+function TichTuSection() {
+  return (
+    <div className="section">
+      <h2>🏢 Biểu hiện mới của Tích tụ và Tập trung Tư bản</h2>
+
+      <ImageGallery
+        title="🏭 Ví dụ: Các tập đoàn Concern & Conglomerate"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Berkshire_Hathaway.svg/320px-Berkshire_Hathaway.svg.png', label: 'Berkshire Hathaway', emoji: '💰' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Samsung_Logo.svg/320px-Samsung_Logo.svg.png', label: 'Samsung (Chaebol)', emoji: '📱' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Exor_logo.svg/320px-Exor_logo.svg.png', label: 'EXOR (Agnelli Group)', emoji: '🏎️' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/320px-Coca-Cola_logo.svg.png', label: 'Coca-Cola', emoji: '🥤' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Toyota.svg/320px-Toyota.svg.png', label: 'Toyota Group', emoji: '🚗' },
+        ]}
+      />
+
+      <div className="card highlight">
+        <h3>🎯 Các hình thức tổ chức độc quyền mới</h3>
+      </div>
+
+      {/* Concern */}
+      <div className="card">
+        <h3>🏭 Concern (Tập đoàn đa ngành)</h3>
+        <div className="definition">
+          <strong>Định nghĩa:</strong> Tổ chức độc quyền đa ngành gồm hàng trăm xí nghiệp
+          có quan hệ với nhiều ngành khác nhau, phân bố ở nhiều quốc gia.
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ thực tế:</h4>
+          <ul>
+            <li><strong>Samsung (Hàn Quốc):</strong> điện tử, đóng tàu, bảo hiểm, xây dựng, khách sạn</li>
+            <li><strong>General Electric (Mỹ):</strong> hàng không, y tế, năng lượng, tài chính</li>
+            <li><strong>Siemens (Đức):</strong> điện tử, y tế, giao thông, năng lượng</li>
+          </ul>
+        </div>
+
+        <div className="reason-box">
+          <h4>🔑 Lý do hình thành:</h4>
+          <ul>
+            <li>Cạnh tranh gay gắt → kinh doanh chuyên môn hóa hẹp dễ phá sản</li>
+            <li>Đối phó luật chống độc quyền (cấm độc quyền 100% một ngành)</li>
+            <li>Đa dạng hóa rủi ro, tối ưu hóa lợi nhuận</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Conglomerate */}
+      <div className="card">
+        <h3>💼 Conglomerate (Tập đoàn hỗn hợp)</h3>
+        <div className="definition">
+          <strong>Định nghĩa:</strong> Sự kết hợp của hàng chục hãng vừa và nhỏ không có
+          liên quan trực tiếp về sản xuất hoặc dịch vụ.
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ thực tế:</h4>
+          <ul>
+            <li><strong>Berkshire Hathaway (Mỹ):</strong> bảo hiểm, đường sắt, năng lượng, bán lẻ, công nghệ</li>
+            <li><strong>Tata Group (Ấn Độ):</strong> ô tô, thép, IT, khách sạn, trà</li>
+            <li><strong>Alibaba (Trung Quốc):</strong> thương mại điện tử, cloud, thanh toán, truyền thông</li>
+          </ul>
+        </div>
+
+        <div className="comparison">
+          <div className="pros">
+            <h4>✅ Ưu điểm:</h4>
+            <ul>
+              <li>Thu lợi nhuận từ kinh doanh chứng khoán</li>
+              <li>Linh hoạt trong đầu tư</li>
+            </ul>
+          </div>
+          <div className="cons">
+            <h4>⚠️ Nhược điểm:</h4>
+            <ul>
+              <li>Dễ bị phá sản nhanh</li>
+              <li>Phụ thuộc vào biến động tài chính</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Doanh nghiệp vừa và nhỏ */}
+      <div className="card">
+        <h3>🏪 Vai trò của Doanh nghiệp Vừa và Nhỏ</h3>
+
+        <div className="reason-box">
+          <h4>🔍 Lý do xuất hiện nhiều:</h4>
+          <div className="two-columns">
+            <div>
+              <strong>1. Công nghệ hiện đại:</strong>
+              <ul>
+                <li>Tiêu chuẩn hóa sản xuất</li>
+                <li>Chuyên môn hóa sâu</li>
+                <li>Hệ thống gia công phát triển</li>
+              </ul>
+            </div>
+            <div>
+              <strong>2. Thế mạnh riêng:</strong>
+              <ul>
+                <li>Nhạy cảm với thay đổi</li>
+                <li>Linh hoạt với thị trường</li>
+                <li>Dễ đổi mới công nghệ</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ cụ thể:</h4>
+          <ul>
+            <li><strong>Ngành ô tô:</strong> Toyota liên kết với 10,000+ nhà cung cấp vừa và nhỏ</li>
+            <li><strong>Công nghệ:</strong> Apple hợp tác với hàng nghìn công ty sản xuất linh kiện</li>
+            <li><strong>Thời trang:</strong> Zara làm việc với 1,400+ xưởng may nhỏ ở Tây Ban Nha</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Độc quyền ở nước đang phát triển */}
+      <div className="card">
+        <h3>🌏 Độc quyền ở các Nước đang Phát triển</h3>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ điển hình:</h4>
+          <ul>
+            <li><strong>Reliance Industries (Ấn Độ):</strong> dầu khí, viễn thông, bán lẻ</li>
+            <li><strong>Petrobras (Brazil):</strong> chi phối ngành dầu khí Brazil</li>
+            <li><strong>Vingroup (Việt Nam):</strong> bất động sản, ô tô, điện thoại, bán lẻ</li>
+            <li><strong>Saudi Aramco (Ả Rập):</strong> độc quyền dầu mỏ toàn cầu</li>
+          </ul>
+        </div>
+
+        <div className="reason-box">
+          <h4>🔑 Nguyên nhân hình thành:</h4>
+          <ul>
+            <li>Sự thâm nhập của TNCs → chuyển giao công nghệ</li>
+            <li>Ứng dụng khoa học kỹ thuật hiện đại</li>
+            <li>Một doanh nghiệp lớn đủ sức chi phối cả ngành mới</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Tài chính Section
+function TaiChinhSection() {
+  return (
+    <div className="section">
+      <h2>💰 Biểu hiện mới về Tư bản Tài chính</h2>
+
+      <ImageGallery
+        title="🏦 Các tập đoàn Tài chính lớn nhất thế giới"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/BlackRock_wordmark.svg/320px-BlackRock_wordmark.svg.png', label: 'BlackRock ($10T AUM)', emoji: '🏛️' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Logo_JPMorgan_Chase.svg/320px-Logo_JPMorgan_Chase.svg.png', label: 'JPMorgan Chase', emoji: '🏦' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Goldman_Sachs.svg/320px-Goldman_Sachs.svg.png', label: 'Goldman Sachs', emoji: '📊' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Bank_of_America_logo.svg/320px-Bank_of_America_logo.svg.png', label: 'Bank of America', emoji: '💵' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Vanguard_Logo.svg/320px-Vanguard_Logo.svg.png', label: 'Vanguard Group', emoji: '⛵' },
+        ]}
+      />
+
+      <div className="card highlight">
+        <h3>🎯 Khái niệm</h3>
+        <p>
+          Tư bản tài chính là sự thống nhất của tư bản ngân hàng và tư bản công nghiệp,
+          nắm trong tay các nhà tư bản tài chính và các tập đoàn tài chính.
+        </p>
+      </div>
+
+      {/* Biểu hiện 1 */}
+      <div className="card">
+        <h3>📊 1. Mở rộng phạm vi liên kết</h3>
+
+        <div className="definition">
+          Liên kết đa dạng: Công - Nông - Thương - Tín - Dịch vụ
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ thực tế:</h4>
+          <ul>
+            <li>
+              <strong>JP Morgan Chase (Mỹ):</strong>
+              <ul>
+                <li>Ngân hàng đầu tư</li>
+                <li>Quản lý tài sản ($3.2 nghìn tỷ)</li>
+                <li>Ngân hàng thương mại</li>
+                <li>Thẻ tín dụng</li>
+                <li>Quỹ đầu tư</li>
+              </ul>
+            </li>
+            <li>
+              <strong>ICBC (Trung Quốc):</strong> Ngân hàng lớn nhất thế giới,
+              liên kết với công nghiệp, bất động sản, bảo hiểm
+            </li>
+          </ul>
+        </div>
+
+        <div className="trend-box">
+          <h4>📈 Xu hướng mới:</h4>
+          <ul>
+            <li>🏥 Dịch vụ y tế + tài chính</li>
+            <li>🌾 Nông nghiệp công nghệ cao + ngân hàng</li>
+            <li>⚡ Năng lượng xanh + đầu tư</li>
+            <li>📱 Fintech (công nghệ tài chính)</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Biểu hiện 2 */}
+      <div className="card">
+        <h3>📜 2. Cơ chế tham dự và ủy nhiệm</h3>
+
+        <div className="mechanism-box">
+          <h4>🔄 Cơ chế hoạt động:</h4>
+          <div className="flow-diagram">
+            <div className="flow-step">
+              <strong>Bước 1:</strong> Phát hành cổ phiếu mệnh giá nhỏ
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Bước 2:</strong> Nhiều tầng lớp dân cư mua cổ phiếu
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Bước 3:</strong> Đại cổ đông được "ủy nhiệm"
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Kết quả:</strong> Kiểm soát công ty với số vốn nhỏ
+            </div>
+          </div>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ minh họa:</h4>
+          <div className="calculation-box">
+            <p><strong>Công ty ABC có vốn 1 tỷ USD:</strong></p>
+            <ul>
+              <li>👥 10 triệu cổ đông nhỏ: 70% cổ phần (rời rạc)</li>
+              <li>👤 1 đại cổ đông: 30% cổ phần (tập trung)</li>
+              <li>✅ Kết quả: Đại cổ đông kiểm soát công ty với chỉ 300 triệu USD</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="method-box">
+          <h4>🎯 Phương thức kiểm soát:</h4>
+          <ul>
+            <li><strong>Trực tiếp:</strong> Nắm cổ phần chi phối, bổ nhiệm ban lãnh đạo</li>
+            <li><strong>Gián tiếp:</strong> Thao túng thị trường tài chính, tín dụng</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Biểu hiện 3 */}
+      <div className="card">
+        <h3>🌐 3. Ngân hàng Đa quốc gia và Xuyên quốc gia</h3>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ các ngân hàng toàn cầu:</h4>
+          <ul>
+            <li>
+              <strong>HSBC (Anh):</strong>
+              <ul>
+                <li>Hoạt động tại 64 quốc gia</li>
+                <li>40 triệu khách hàng</li>
+                <li>Tổng tài sản: $3 nghìn tỷ</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Citigroup (Mỹ):</strong>
+              <ul>
+                <li>Có mặt tại 160+ quốc gia</li>
+                <li>200 triệu tài khoản</li>
+              </ul>
+            </li>
+            <li>
+              <strong>BNP Paribas (Pháp):</strong> Ngân hàng lớn nhất châu Âu,
+              hoạt động tại 72 quốc gia
+            </li>
+          </ul>
+        </div>
+
+        <div className="center-box">
+          <h4>🏙️ Các trung tâm tài chính thế giới:</h4>
+          <div className="two-columns">
+            <div>
+              <strong>🥇 Top 5 trung tâm:</strong>
+              <ul>
+                <li>🗽 New York (Phố Wall)</li>
+                <li>🇬🇧 London (City of London)</li>
+                <li>🇭🇰 Hong Kong</li>
+                <li>🇸🇬 Singapore</li>
+                <li>🗼 Tokyo</li>
+              </ul>
+            </div>
+            <div>
+              <strong>📊 Vai trò:</strong>
+              <ul>
+                <li>Giao dịch ngoại hối</li>
+                <li>Thị trường chứng khoán</li>
+                <li>Trái phiếu quốc tế</li>
+                <li>Phái sinh tài chính</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Xuất khẩu Section
+function XuatKhauSection() {
+  return (
+    <div className="section">
+      <h2>🌍 Biểu hiện mới của Xuất khẩu Tư bản</h2>
+
+      <ImageGallery
+        title="🌟 Ví dụ: FDI & Xuất khẩu Tư bản hiện đại"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/320px-Amazon_logo.svg.png', label: 'Amazon AWS (FDI Cloud)', emoji: '☁️' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Berkshire_Hathaway.svg/320px-Berkshire_Hathaway.svg.png', label: 'Berkshire Hathaway', emoji: '💰' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Toyota_Motor_Corporation_Logo.png/240px-Toyota_Motor_Corporation_Logo.png', label: 'Toyota FDI VN', emoji: '🇻🇳' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/160px-Apple_logo_black.svg.png', label: 'Apple Supply Chain', emoji: '🌏' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Temasek_Logo.svg/280px-Temasek_Logo.svg.png', label: 'Temasek Holdings', emoji: '🇸🇬' },
+        ]}
+      />
+
+      {/* Biểu hiện 1 */}
+      <div className="card">
+        <h3>🔄 1. Thay đổi dòng chảy tư bản</h3>
+
+        <div className="comparison-table">
+          <div className="table-row header">
+            <div>Trước đây</div>
+            <div>→</div>
+            <div>Hiện nay</div>
+          </div>
+          <div className="table-row">
+            <div>Nước phát triển → Nước kém phát triển</div>
+            <div>⇌</div>
+            <div>Nước phát triển ⇄ Nước phát triển</div>
+          </div>
+        </div>
+
+        <div className="stat-box">
+          <h4>📊 Thống kê FDI 2025:</h4>
+          <ul>
+            <li>🇺🇸 → 🇪🇺: $450 tỷ (công nghệ, dược phẩm)</li>
+            <li>🇪🇺 → 🇺🇸: $380 tỷ (ô tô, hóa chất)</li>
+            <li>🇯🇵 → 🇺🇸: $180 tỷ (điện tử, robot)</li>
+            <li>💡 <strong>70% FDI toàn cầu</strong> luân chuyển giữa các nước phát triển</li>
+          </ul>
+        </div>
+
+        <div className="reason-box">
+          <h4>🔑 Nguyên nhân:</h4>
+          <div className="two-columns">
+            <div>
+              <strong>✅ Ưu tiên nước phát triển:</strong>
+              <ul>
+                <li>Công nghệ cao, vốn lớn</li>
+                <li>Lợi nhuận cao hơn</li>
+                <li>Hạ tầng hoàn thiện</li>
+                <li>Chính trị ổn định</li>
+              </ul>
+            </div>
+            <div>
+              <strong>⚠️ Hạn chế nước đang phát triển:</strong>
+              <ul>
+                <li>Hạ tầng lạc hậu</li>
+                <li>Chính trị kém ổn định</li>
+                <li>Rủi ro cao</li>
+                <li>Lợi nhuận giảm</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Biểu hiện 2 */}
+      <div className="card">
+        <h3>🏢 2. Thay đổi chủ thể xuất khẩu</h3>
+
+        <div className="example-box">
+          <h4>📌 Vai trò của TNCs:</h4>
+          <ul>
+            <li>
+              <strong>Apple (Mỹ):</strong>
+              <ul>
+                <li>Đầu tư nhà máy tại Trung Quốc, Ấn Độ, Việt Nam</li>
+                <li>FDI hàng năm: $15-20 tỷ</li>
+                <li>Chuỗi cung ứng 200+ quốc gia</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Toyota (Nhật):</strong>
+              <ul>
+                <li>53 nhà máy ở 28 quốc gia</li>
+                <li>Sản xuất 10 triệu xe/năm ở ngoài Nhật</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Volkswagen (Đức):</strong> 122 nhà máy tại 31 quốc gia
+            </li>
+          </ul>
+        </div>
+
+        <div className="trend-box">
+          <h4>🌏 Chủ thể mới từ nước đang phát triển:</h4>
+          <ul>
+            <li><strong>🇨🇳 Trung Quốc:</strong> Huawei, Alibaba, BYD đầu tư ra nước ngoài hàng chục tỷ USD/năm</li>
+            <li><strong>🇮🇳 Ấn Độ:</strong> Tata Motors mua Jaguar Land Rover, Mittal Steel</li>
+            <li><strong>🇧🇷 Brazil:</strong> Embraer xuất khẩu máy bay ra toàn cầu</li>
+            <li><strong>🇻🇳 Việt Nam:</strong> Vingroup, Viettel đầu tư vào Myanmar, Lào, Campuchia</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Biểu hiện 3 */}
+      <div className="card">
+        <h3>💼 3. Đa dạng hóa hình thức xuất khẩu</h3>
+
+        <div className="form-box">
+          <h4>🔧 Các hình thức mới:</h4>
+
+          <div className="form-item">
+            <strong>BOT (Build-Operate-Transfer):</strong>
+            <div className="example-box">
+              <p>Xây dựng - Kinh doanh - Chuyển giao</p>
+              <p><strong>Ví dụ:</strong></p>
+              <ul>
+                <li>Cao tốc Bắc-Nam (Việt Nam): Vốn Nhật, thời gian BOT 30 năm</li>
+                <li>Nhà máy điện Phú Mỹ: Samsung C&T đầu tư theo BOT</li>
+                <li>Cảng Lạch Huyện (Hải Phòng): Vốn Nhật $1.1 tỷ, BOT 50 năm</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="form-item">
+            <strong>BT (Build-Transfer):</strong>
+            <div className="example-box">
+              <p>Xây dựng - Chuyển giao</p>
+              <p><strong>Ví dụ:</strong></p>
+              <ul>
+                <li>Dự án hạ tầng đổi lấy quỹ đất</li>
+                <li>Trung Quốc xây cầu đường ở châu Phi đổi lấy quyền khai thác khoáng sản</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="form-item">
+            <strong>PPP (Public-Private Partnership):</strong>
+            <div className="example-box">
+              <p>Đối tác công tư</p>
+              <p><strong>Ví dụ:</strong> Dự án metro Hà Nội, TP.HCM có sự hợp tác vốn nhà nước và tư nhân</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="combination-box">
+          <h4>🔗 Kết hợp đa dạng:</h4>
+          <ul>
+            <li>💻 <strong>Xuất khẩu chất xám:</strong> chuyển giao công nghệ, bản quyền, đào tạo</li>
+            <li>📦 <strong>Xuất khẩu + đầu tư:</strong> bán sản phẩm kèm xây nhà máy</li>
+            <li>🤝 <strong>Joint venture:</strong> liên doanh công nghệ + tài chính</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Biểu hiện 4 */}
+      <div className="card">
+        <h3>🤝 4. Từ áp đặt sang Cùng có lợi</h3>
+
+        <div className="comparison-table">
+          <div className="table-row header">
+            <div>Thời kỳ thực dân cũ</div>
+            <div>→</div>
+            <div>Thời kỳ hiện nay</div>
+          </div>
+          <div className="table-row">
+            <div>❌ Áp đặt, bóc lột trực tiếp</div>
+            <div></div>
+            <div>✅ Win-win, hợp tác đôi bên</div>
+          </div>
+          <div className="table-row">
+            <div>❌ Chiếm đoạt tài nguyên</div>
+            <div></div>
+            <div>✅ Chuyển giao công nghệ</div>
+          </div>
+          <div className="table-row">
+            <div>❌ Lao động rẻ mạt</div>
+            <div></div>
+            <div>✅ Đào tạo, nâng cao kỹ năng</div>
+          </div>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ hợp tác cùng có lợi:</h4>
+          <ul>
+            <li>
+              <strong>Samsung tại Việt Nam:</strong>
+              <ul>
+                <li>Đầu tư: $20 tỷ</li>
+                <li>Việt Nam được: việc làm (200,000 người), chuyển giao công nghệ, xuất khẩu $70 tỷ/năm</li>
+                <li>Samsung được: chi phí thấp, thị trường ASEAN, ưu đãi thuế</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Tesla ở Trung Quốc:</strong>
+              <ul>
+                <li>Trung Quốc: công nghệ xe điện, việc làm, phát triển chuỗi cung ứng</li>
+                <li>Tesla: thị trường lớn nhất thế giới, giảm chi phí vận chuyển</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Thị trường Section
+function ThiTruongSection() {
+  return (
+    <div className="section">
+      <h2>🗺️ Phân chia Thị trường Thế giới</h2>
+
+      <ImageGallery
+        title="🤝 Liên minh kinh tế & Tổ chức quyn monopoly"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/320px-Flag_of_Europe.svg.png', label: 'Liên minh Châu Âu (EU)', emoji: '🇪🇺' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/OPEC_logo.svg/240px-OPEC_logo.svg.png', label: 'OPEC - Dầu mỏ', emoji: '🛢️' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/WTO_logo.svg/240px-WTO_logo.svg.png', label: 'WTO', emoji: '🌐' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/ASEAN_emblem.svg/240px-ASEAN_emblem.svg.png', label: 'ASEAN', emoji: '🇸🇪' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/320px-Coca-Cola_logo.svg.png', label: 'Coca-Cola Phân chia', emoji: '🥤' },
+        ]}
+      />
+
+      <div className="card highlight">
+        <h3>🎯 Xu hướng chính</h3>
+        <div className="two-columns">
+          <div className="trend-item">
+            <h4>🌐 Toàn cầu hóa</h4>
+            <p>Kinh tế thế giới liên kết chặt chẽ, biên giới mờ nhạt</p>
+          </div>
+          <div className="trend-item">
+            <h4>🏛️ Khu vực hóa</h4>
+            <p>Các khối liên minh kinh tế khu vực ra đời</p>
+          </div>
+        </div>
+      </div>
+
+      {/* TNCs */}
+      <div className="card">
+        <h3>🏢 Vai trò của Công ty Xuyên quốc gia (TNCs)</h3>
+
+        <div className="stat-box">
+          <h4>📊 Quy mô và sức mạnh:</h4>
+          <ul>
+            <li>💼 <strong>Số lượng:</strong> hơn 80,000 TNCs toàn cầu</li>
+            <li>🏭 <strong>Chi nhánh:</strong> 800,000+ công ty con</li>
+            <li>💵 <strong>Doanh thu:</strong> Top 100 TNCs = GDP của 150 quốc gia</li>
+            <li>👥 <strong>Lao động:</strong> 100+ triệu người làm việc trực tiếp</li>
+            <li>📈 <strong>Tỷ trọng:</strong> kiểm soát 70% thương mại thế giới</li>
+          </ul>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Top 10 TNCs mạnh nhất (2025):</h4>
+          <div className="top-list">
+            <div className="top-item">
+              <strong>1. Apple 🍎</strong> - Vốn hóa $3.5 nghìn tỷ - Công nghệ
+            </div>
+            <div className="top-item">
+              <strong>2. Microsoft 💻</strong> - $3.2 nghìn tỷ - Phần mềm, Cloud
+            </div>
+            <div className="top-item">
+              <strong>3. Saudi Aramco 🛢️</strong> - $2.8 nghìn tỷ - Dầu khí
+            </div>
+            <div className="top-item">
+              <strong>4. Amazon 📦</strong> - $2.1 nghìn tỷ - Thương mại điện tử
+            </div>
+            <div className="top-item">
+              <strong>5. Nvidia 🎮</strong> - $2.0 nghìn tỷ - Chip AI
+            </div>
+          </div>
+        </div>
+
+        <div className="influence-box">
+          <h4>🎯 Phạm vi ảnh hưởng:</h4>
+          <ul>
+            <li><strong>Walmart:</strong> Hoạt động 24 quốc gia, 10,500 cửa hàng, 2.3 triệu nhân viên</li>
+            <li><strong>Shell:</strong> Khai thác dầu khí tại 70+ quốc gia</li>
+            <li><strong>Nestlé:</strong> 2,000 thương hiệu, bán tại 189 quốc gia</li>
+            <li><strong>Coca-Cola:</strong> Tiêu thụ tại 200+ quốc gia, 1.9 tỷ ly/ngày</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Khu vực hóa */}
+      <div className="card">
+        <h3>🏛️ Các Liên minh Kinh tế Khu vực</h3>
+
+        <div className="region-box">
+          <h4>🇪🇺 1. Liên minh châu Âu (EU)</h4>
+          <ul>
+            <li><strong>Thành lập:</strong> 1993 (từ EEC 1957)</li>
+            <li><strong>Thành viên:</strong> 27 quốc gia (sau Brexit)</li>
+            <li><strong>Dân số:</strong> 450 triệu người</li>
+            <li><strong>GDP:</strong> $18 nghìn tỷ (2025)</li>
+            <li><strong>Đồng tiền:</strong> Euro (€) - 20 quốc gia sử dụng</li>
+            <li><strong>Đặc điểm:</strong>
+              <ul>
+                <li>✅ Hàng hóa, dịch vụ, vốn, lao động tự do lưu chuyển</li>
+                <li>✅ Chính sách chung về nông nghiệp, thương mại</li>
+                <li>✅ Nghị viện châu Âu, Tòa án Công lý EU</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="region-box">
+          <h4>🌎 2. NAFTA / USMCA (Bắc Mỹ)</h4>
+          <ul>
+            <li><strong>Thành viên:</strong> Mỹ, Canada, Mexico</li>
+            <li><strong>Ra đời:</strong> NAFTA (1994) → USMCA (2020)</li>
+            <li><strong>Dân số:</strong> 500 triệu người</li>
+            <li><strong>GDP:</strong> $28 nghìn tỷ</li>
+            <li><strong>Thương mại nội khối:</strong> $1.3 nghìn tỷ/năm</li>
+            <li><strong>Đặc điểm:</strong>
+              <ul>
+                <li>✅ Xóa bỏ 99% thuế quan</li>
+                <li>✅ Bảo hộ sở hữu trí tuệ</li>
+                <li>✅ Quy định về lao động, môi trường</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="region-box">
+          <h4>🌏 3. ASEAN (Đông Nam Á)</h4>
+          <ul>
+            <li><strong>Thành viên:</strong> 10 quốc gia ĐNA</li>
+            <li><strong>Thành lập:</strong> 1967</li>
+            <li><strong>Dân số:</strong> 680 triệu người</li>
+            <li><strong>GDP:</strong> $3.6 nghìn tỷ</li>
+            <li><strong>Mục tiêu:</strong> Cộng đồng kinh tế ASEAN (AEC) 2025</li>
+            <li><strong>FTA với:</strong> Trung Quốc, Nhật, Hàn, Ấn Độ, Australia-New Zealand</li>
+          </ul>
+        </div>
+
+        <div className="region-box">
+          <h4>🛢️ 4. OPEC (Tổ chức Xuất khẩu Dầu mỏ)</h4>
+          <ul>
+            <li><strong>Thành viên:</strong> 13 quốc gia (Ả Rập Saudi, Iran, UAE, Kuwait...)</li>
+            <li><strong>Thành lập:</strong> 1960</li>
+            <li><strong>Sản lượng:</strong> 40% dầu thế giới</li>
+            <li><strong>Dự trữ:</strong> 80% trữ lượng dầu toàn cầu</li>
+            <li><strong>Vai trò:</strong> Quyết định giá dầu thế giới thông qua điều chỉnh sản lượng</li>
+          </ul>
+        </div>
+
+        <div className="region-box">
+          <h4>🌍 5. Các liên minh khác</h4>
+          <ul>
+            <li><strong>MERCOSUR (Nam Mỹ):</strong> Brazil, Argentina, Uruguay, Paraguay</li>
+            <li><strong>RCEP (châu Á-TBD):</strong> 15 quốc gia, FTA lớn nhất thế giới (2020)</li>
+            <li><strong>African Continental FTA:</strong> 54 quốc gia châu Phi (2021)</li>
+            <li><strong>CPTPP:</strong> 11 quốc gia vùng TBD (sau khi Mỹ rút)</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Cạnh tranh */}
+      <div className="card">
+        <h3>⚔️ Cạnh tranh giữa các Khối</h3>
+
+        <div className="competition-box">
+          <h4>🥊 Chiến tranh thương mại Mỹ - Trung:</h4>
+          <ul>
+            <li><strong>2018-2019:</strong> Mỹ áp thuế 25% lên $250 tỷ hàng Trung Quốc</li>
+            <li><strong>Đáp trả:</strong> Trung Quốc thuế 25% hàng Mỹ</li>
+            <li><strong>Công nghệ:</strong> Cấm vận Huawei, TikTok, ZTE</li>
+            <li><strong>Chip:</strong> Mỹ hạn chế xuất chip tiên tiến sang TQ</li>
+            <li><strong>Ảnh hưởng:</strong> Chuỗi cung ứng toàn cầu tái cấu trúc</li>
+          </ul>
+        </div>
+
+        <div className="strategy-box">
+          <h4>🎯 Chiến lược của các cường quốc:</h4>
+          <ul>
+            <li><strong>🇺🇸 Mỹ:</strong> "America First", tái công nghiệp hóa, kiềm chế Trung Quốc</li>
+            <li><strong>🇨🇳 Trung Quốc:</strong> "Vành đai con đường" (BRI), Made in China 2025</li>
+            <li><strong>🇪🇺 EU:</strong> Tự chủ chiến lược, chuyển đổi xanh</li>
+            <li><strong>🇷🇺 Nga:</strong> Liên kết với BRICS, Liên minh Á-Âu</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Vai trò nước đang phát triển */}
+      <div className="card">
+        <h3>🌏 Vai trò của Nước đang Phát triển</h3>
+
+        <div className="example-box">
+          <h4>📌 BRICS mở rộng:</h4>
+          <ul>
+            <li><strong>Thành viên gốc:</strong> Brazil, Nga, Ấn Độ, Trung Quốc, Nam Phi</li>
+            <li><strong>Mở rộng 2024:</strong> + Ả Rập Saudi, UAE, Iran, Ai Cập, Ethiopia, Argentina</li>
+            <li><strong>Dân số:</strong> 46% dân số thế giới</li>
+            <li><strong>GDP:</strong> 36% GDP toàn cầu (PPP)</li>
+            <li><strong>Mục tiêu:</strong> Ngân hàng phát triển BRICS, đồng tiền riêng thay USD</li>
+          </ul>
+        </div>
+
+        <div className="significance-box">
+          <h4>💡 Ý nghĩa:</h4>
+          <ul>
+            <li>✊ Chống lại sức ép của cường quốc tư bản</li>
+            <li>🤝 Tăng sức mạnh thương lượng trong WTO, IMF, World Bank</li>
+            <li>🌱 Thúc đẩy hợp tác Nam-Nam</li>
+            <li>⚖️ Cân bằng lại trật tự thế giới đa cực</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Lãnh thổ Section
+function LanhThoSection() {
+  return (
+    <div className="section">
+      <h2>⚔️ Phân chia Lãnh thổ Ảnh hưởng</h2>
+
+      <ImageGallery
+        title="🇺🇸 Các tổ chức địa chính trị & quân sự"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/NATO_OTAN_landscape_logo.svg/320px-NATO_OTAN_landscape_logo.svg.png', label: 'NATO', emoji: '🛡️' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Flag_of_the_United_Nations.svg/320px-Flag_of_the_United_Nations.svg.png', label: 'Liên Hợp Quốc', emoji: '🌍' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/320px-Flag_of_the_United_States.svg.png', label: 'Mỹ - Siêu cường số 1', emoji: '🇺🇸' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', label: 'Nga', emoji: '🇷🇺' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/320px-Flag_of_the_People%27s_Republic_of_China.svg.png', label: 'Trung Quốc', emoji: '🇨🇳' },
+        ]}
+      />
+
+      <div className="card highlight">
+        <h3>🎯 Bối cảnh</h3>
+        <p>
+          Tuy chủ nghĩa thực dân cũ đã sụp đổ, nhưng các cường quốc tư bản vẫn tiếp tục
+          tranh giành phạm vi ảnh hưởng dưới những hình thức mới, tinh vi hơn.
+        </p>
+      </div>
+
+      {/* Chiến lược biên giới mềm */}
+      <div className="card">
+        <h3>🌐 1. Chiến lược "Biên giới mềm"</h3>
+
+        <div className="definition">
+          <strong>Khái niệm:</strong> Bành trướng "biên giới kinh tế" rộng hơn biên giới địa lý,
+          ràng buộc các nước kém phát triển qua sự lệ thuộc về vốn, công nghệ và chính trị.
+        </div>
+
+        <div className="dependency-chain">
+          <h4>🔗 Chuỗi lệ thuộc:</h4>
+          <div className="flow-diagram">
+            <div className="flow-step">
+              <strong>Bước 1:</strong> Lệ thuộc về VỐN
+              <p className="sub-text">Vay nợ, ODA, FDI</p>
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Bước 2:</strong> Lệ thuộc về CÔNG NGHỆ
+              <p className="sub-text">Nhập máy móc, bản quyền</p>
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Bước 3:</strong> Lệ thuộc về KINH TẾ
+              <p className="sub-text">Thị trường, nguyên liệu</p>
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Kết quả:</strong> Lệ thuộc về CHÍNH TRỊ
+              <p className="sub-text">Mất chủ quyền thực chất</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ cụ thể:</h4>
+
+          <div className="case-study">
+            <strong>🇬🇷 Hy Lạp và EU:</strong>
+            <ul>
+              <li><strong>Khủng hoảng nợ 2009:</strong> Nợ công 180% GDP</li>
+              <li><strong>Gói cứu trợ:</strong> EU-IMF cho vay $300 tỷ</li>
+              <li><strong>Điều kiện:</strong>
+                <ul>
+                  <li>Cắt giảm lương công chức 20%</li>
+                  <li>Tăng tuổi nghỉ hưu lên 67</li>
+                  <li>Tư nhân hóa tài sản nhà nước</li>
+                  <li>Cải cách thuế, lao động</li>
+                </ul>
+              </li>
+              <li><strong>Kết quả:</strong> Hy Lạp mất tự chủ chính sách kinh tế, chính trị bị chi phối</li>
+            </ul>
+          </div>
+
+          <div className="case-study">
+            <strong>🌍 Châu Phi và Trung Quốc:</strong>
+            <ul>
+              <li><strong>Vành đai Con đường (BRI):</strong> TQ cho vay $200 tỷ xây hạ tầng châu Phi</li>
+              <li><strong>Bẫy nợ:</strong>
+                <ul>
+                  <li>Sri Lanka: Không trả được nợ → phải cho TQ thuê cảng Hambantota 99 năm</li>
+                  <li>Kenya: Nợ đường sắt $5 tỷ → 70% doanh thu cảng Mombasa trả nợ TQ</li>
+                  <li>Zambia: Vỡ nợ → TQ kiểm soát mỏ đồng, điện lực</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div className="case-study">
+            <strong>🇻🇪 Venezuela và các cường quốc:</strong>
+            <ul>
+              <li><strong>Khai thác dầu:</strong> Dự trữ lớn nhất thế giới nhưng lệ thuộc công nghệ</li>
+              <li><strong>Nợ Trung Quốc:</strong> $60 tỷ → phải trả bằng dầu giá rẻ</li>
+              <li><strong>Trừng phạt Mỹ:</strong> Cấm vận → kinh tế sụp đổ, siêu lạm phát 1,000,000%</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="method-box">
+          <h4>🎭 Các thủ đoạn:</h4>
+          <ul>
+            <li><strong>💰 Viện trợ có điều kiện (ODA):</strong> Ràng buộc mua hàng, thuê chuyên gia từ nước viện trợ</li>
+            <li><strong>🏦 Cho vay lãi cao:</strong> IMF, World Bank áp đặt điều kiện cải cách theo tư bản</li>
+            <li><strong>📜 Hiệp định BIT:</strong> Bảo hộ nhà đầu tư, kiện ra tòa quốc tế</li>
+            <li><strong>🎓 Đào tạo tinh hoa:</strong> Học bổng → trở về áp dụng mô hình phương Tây</li>
+            <li><strong>📺 Truyền thông văn hóa:</strong> Hollywood, CNN, BBC định hình dư luận</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Chiến tranh thế kỷ 21 */}
+      <div className="card">
+        <h3>💥 2. Các hình thức Chiến tranh Mới</h3>
+
+        <div className="war-type">
+          <h4>💼 Chiến tranh Thương mại</h4>
+          <div className="example-box">
+            <strong>📌 Ví dụ:</strong>
+            <ul>
+              <li>
+                <strong>Mỹ - Trung (2018-nay):</strong>
+                <ul>
+                  <li>Thuế quan: $360 tỷ hàng hóa</li>
+                  <li>Cấm vận công nghệ: Huawei, ZTE, SMIC</li>
+                  <li>Kiểm soát xuất khẩu chip 5G, AI</li>
+                  <li>Tổn thất: $100 tỷ cho mỗi bên</li>
+                </ul>
+              </li>
+              <li>
+                <strong>EU - Mỹ (tranh chấp máy bay):</strong>
+                <ul>
+                  <li>Boeing vs Airbus</li>
+                  <li>WTO phán quyết cả 2 đều trợ cấp bất hợp pháp</li>
+                  <li>Thuế trả đũa: phô mai, rượu, máy bay</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="war-type">
+          <h4>📱 Chiến tranh Công nghệ</h4>
+          <div className="example-box">
+            <strong>📌 Ví dụ:</strong>
+            <ul>
+              <li>
+                <strong>Cuộc chiến Chip:</strong>
+                <ul>
+                  <li>Mỹ: Cấm bán chip tiên tiến (&lt;7nm) cho TQ</li>
+                  <li>Hà Lan: Cấm ASML xuất máy EUV sang TQ</li>
+                  <li>Nhật-Hàn: Hạn chế bán vật liệu bán dẫn</li>
+                  <li>TQ đáp trả: Cấm xuất gallium, germanium</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Mạng 5G:</strong>
+                <ul>
+                  <li>Mỹ vận động đồng minh tẩy chay Huawei</li>
+                  <li>Lý do: an ninh quốc gia, gián điệp</li>
+                  <li>30+ quốc gia cấm hoặc hạn chế Huawei</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="war-type">
+          <h4>💻 Chiến tranh Mạng (Cyber War)</h4>
+          <div className="example-box">
+            <strong>📌 Ví dụ:</strong>
+            <ul>
+              <li>
+                <strong>Stuxnet (2010):</strong>
+                <ul>
+                  <li>Mỹ-Israel tấn công hạt nhân Iran</li>
+                  <li>Phá hủy 1,000 máy ly tâm uranium</li>
+                </ul>
+              </li>
+              <li>
+                <strong>SolarWinds (2020):</strong>
+                <ul>
+                  <li>Nghi Nga tấn công 18,000 tổ chức Mỹ</li>
+                  <li>Xâm nhập: Lầu Năm Góc, Bộ Tài chính, Microsoft</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Colonial Pipeline (2021):</strong>
+                <ul>
+                  <li>Ransomware tấn công đường ống dẫn dầu lớn nhất Mỹ</li>
+                  <li>Thiệt hại: $5 triệu tiền chuộc, khủng hoảng xăng dầu</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="war-type">
+          <h4>🛢️ Chiến tranh Năng lượng</h4>
+          <div className="example-box">
+            <strong>📌 Ví dụ:</strong>
+            <ul>
+              <li>
+                <strong>Nord Stream (2022):</strong>
+                <ul>
+                  <li>Nga cắt khí đốt sang châu Âu</li>
+                  <li>Giá khí tăng 10 lần</li>
+                  <li>Châu Âu khủng hoảng năng lượng mùa đông</li>
+                  <li>Tháng 9/2022: Nord Stream 1 & 2 bị phá hủy (bí ẩn)</li>
+                </ul>
+              </li>
+              <li>
+                <strong>OPEC+ và giá dầu:</strong>
+                <ul>
+                  <li>2020: Nga-Ả Rập tranh chấp → giá dầu âm $-37/thùng</li>
+                  <li>2022: Cắt giảm sản lượng → giá tăng $120/thùng</li>
+                  <li>Vũ khí địa chính trị đối phó phương Tây</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="war-type">
+          <h4>🕌 Chiến tranh Sắc tộc - Tôn giáo</h4>
+          <div className="example-box">
+            <strong>📌 Ví dụ (có bóng các cường quốc):</strong>
+            <ul>
+              <li>
+                <strong>Syria (2011-nay):</strong>
+                <ul>
+                  <li>Mỹ-EU hỗ trợ phe đối lập</li>
+                  <li>Nga-Iran hỗ trợ chính phủ Assad</li>
+                  <li>Thổ Nhĩ Kỳ, Ả Rập Saudi cũng can thiệp</li>
+                  <li>Hậu quả: 500,000 người chết, 13 triệu người di tản</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Yemen (2014-nay):</strong>
+                <ul>
+                  <li>Ả Rập Saudi (ủng hộ Mỹ) vs Iran (hỗ trợ Houthi)</li>
+                  <li>Khủng hoảng nhân đạo nghiêm trọng nhất thế giới</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Libya (2011):</strong>
+                <ul>
+                  <li>NATO can thiệp lật đổ Gaddafi</li>
+                  <li>Để lại Libya chia rẽ, nội chiến kéo dài</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Ukraine (2014-nay):</strong>
+                <ul>
+                  <li>Xung đột Nga-phương Tây</li>
+                  <li>2014: Crimea, Donbass</li>
+                  <li>2022: Nga tấn công toàn diện</li>
+                  <li>NATO-EU hỗ trợ Ukraine $200+ tỷ</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Chiến tranh lạnh mới */}
+      <div className="card">
+        <h3>🧊 3. Nguy cơ Chiến tranh Lạnh Mới</h3>
+
+        <div className="tension-box">
+          <h4>⚠️ Các điểm nóng:</h4>
+
+          <div className="hotspot">
+            <strong>🌏 Biển Đông:</strong>
+            <ul>
+              <li>Trung Quốc bồi đắp đảo nhân tạo, quân sự hóa</li>
+              <li>Mỹ tuần tra "tự do hàng hải"</li>
+              <li>$3.4 nghìn tỷ thương mại/năm qua đây</li>
+              <li>Căng thẳng với VN, PH, MY, ID</li>
+            </ul>
+          </div>
+
+          <div className="hotspot">
+            <strong>🏝️ Đài Loan:</strong>
+            <ul>
+              <li>TQ coi là tỉnh nổi loạn, đe dọa thống nhất bằng vũ lực</li>
+              <li>Mỹ cam kết bảo vệ (mơ hồ)</li>
+              <li>Vai trò then chốt trong sản xuất chip (TSMC)</li>
+              <li>Nguy cơ chiến tranh cao nhất kể từ 1979</li>
+            </ul>
+          </div>
+
+          <div className="hotspot">
+            <strong>🚀 Chạy đua Vũ trang:</strong>
+            <ul>
+              <li>Chi tiêu quân sự toàn cầu: $2.4 nghìn tỷ/năm (2025)</li>
+              <li>Mỹ: $900 tỷ (38%)</li>
+              <li>TQ: $300 tỷ (13%)</li>
+              <li>Vũ khí siêu thanh, AI, không gian, lượng tử</li>
+              <li>Hiệp ước kiểm soát vũ khí tan rã (INF, Open Skies...)</li>
+            </ul>
+          </div>
+
+          <div className="hotspot">
+            <strong>🌌 Không gian:</strong>
+            <ul>
+              <li>Chạy đua quân sự hóa không gian</li>
+              <li>Mỹ thành lập Lực lượng Không gian (Space Force)</li>
+              <li>TQ, Nga thử nghiệm vũ khí chống vệ tinh</li>
+              <li>Nguy cơ chiến tranh không gian</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="comparison-table">
+          <h4>🆚 So sánh Chiến tranh lạnh Cũ vs Mới:</h4>
+          <div className="table-row header">
+            <div>Chiến tranh lạnh (1947-1991)</div>
+            <div>Căng thẳng hiện nay</div>
+          </div>
+          <div className="table-row">
+            <div>Mỹ vs Liên Xô (hai cực)</div>
+            <div>Mỹ vs Trung Quốc (đa cực hơn)</div>
+          </div>
+          <div className="table-row">
+            <div>Tư bản vs Xã hội chủ nghĩa</div>
+            <div>Bá quyền vs Trỗi dậy</div>
+          </div>
+          <div className="table-row">
+            <div>Kinh tế tách biệt</div>
+            <div>Kinh tế đan xen sâu</div>
+          </div>
+          <div className="table-row">
+            <div>Chạy đua vũ trang hạt nhân</div>
+            <div>Cạnh tranh công nghệ, kinh tế</div>
+          </div>
+          <div className="table-row">
+            <div>Liên minh rõ ràng (NATO vs Warsaw)</div>
+            <div>Liên minh linh hoạt hơn</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Kết luận */}
+      <div className="card highlight">
+        <h3>🎓 Kết luận</h3>
+        <ul className="conclusion-list">
+          <li>✅ Phân chia lãnh thổ không còn bằng chiến tranh quân sự trực tiếp</li>
+          <li>✅ Chuyển sang hình thức tinh vi: kinh tế, công nghệ, văn hóa, mạng</li>
+          <li>✅ "Biên giới mềm" - ràng buộc gián tiếp nhưng hiệu quả hơn</li>
+          <li>✅ Các cường quốc vẫn tranh giành ảnh hưởng quyết liệt</li>
+          <li>✅ Nước đang phát triển cần cảnh giác, bảo vệ chủ quyền thực chất</li>
+          <li>✅ Nguy cơ chiến tranh lạnh mới và xung đột vũ trang vẫn hiện hữu</li>
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+// Nhân sự Section
+function NhanSuSection() {
+  return (
+    <div className="section">
+      <h2>🏛️ Cơ chế Quan hệ Nhân sự</h2>
+
+      <ImageGallery
+        title="🔄 Ví dụ Revolving Door - Cửa quay nhân sự"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Logo_JPMorgan_Chase.svg/320px-Logo_JPMorgan_Chase.svg.png', label: 'JPMorgan ↔ FED', emoji: '🏦' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Goldman_Sachs.svg/320px-Goldman_Sachs.svg.png', label: 'Goldman Sachs ↔ Nhà nước', emoji: '🏦' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/320px-Microsoft_logo.svg.png', label: 'Microsoft ↔ Sáng kiến công', emoji: '💻' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Federal_Reserve_logo.svg/240px-Federal_Reserve_logo.svg.png', label: 'Cục Dự trữ Liên bang', emoji: '🧱' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/BlackRock_wordmark.svg/320px-BlackRock_wordmark.svg.png', label: 'BlackRock ↔ Chính phủ', emoji: '🏛️' },
+        ]}
+      />
+
+      <div className="card highlight">
+        <h3>🎯 Biểu hiện mới về cơ chế quan hệ nhân sự</h3>
+        <p>
+          Sự phát triển của trình độ dân trí và quy luật cạnh tranh trong xã hội tư bản
+          ngày nay dẫn đến sự thay đổi về quan hệ nhân sự trong bộ máy chính quyền nhà nước.
+        </p>
+      </div>
+
+      <div className="card">
+        <h3>⚖️ Thể chế Đa nguyên</h3>
+
+        <div className="definition">
+          <strong>Thể chế đa nguyên trong phân chia quyền lực nhà nước trở thành phổ biến</strong>
+        </div>
+
+        <div className="mechanism-box">
+          <h4>🔄 Cơ chế thỏa hiệp:</h4>
+          <p>
+            Tại các nước tư bản phát triển nhất xuất hiện cơ chế thỏa hiệp để cùng tồn tại,
+            cùng phân chia quyền lực giữa các thế lực tư bản độc quyền.
+          </p>
+          <ul>
+            <li>Không cho phép bất kỳ một thế lực tư bản nào độc tôn, chuyên quyền</li>
+            <li>Phân chia quyền lực theo cơ chế tam quyền phân lập</li>
+            <li>Cân bằng lợi ích giữa các nhóm độc quyền</li>
+          </ul>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ điển hình:</h4>
+          <ul>
+            <li>
+              <strong>Mỹ:</strong>
+              <ul>
+                <li>Đảng Dân chủ vs Đảng Cộng hòa luân phiên nắm quyền</li>
+                <li>Đại diện cho các nhóm lợi ích tư bản khác nhau</li>
+                <li>Dân chủ: công nghiệp công nghệ, phía Tây</li>
+                <li>Cộng hòa: năng lượng hóa thạch, quân sự, phía Nam</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Đức:</strong>
+              <ul>
+                <li>Liên minh CDU/CSU vs SPD thường phải lập chính phủ liên minh</li>
+                <li>Phản ánh sự cân bằng giữa các tập đoàn công nghiệp lớn</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Pháp:</strong>
+              <ul>
+                <li>Tổng thống và Thủ tướng có thể thuộc phe khác nhau</li>
+                <li>"Cohabitation" - chung sống chính trị</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>🎭 Thế lực Trung dung</h3>
+
+        <div className="reason-box">
+          <h4>🔑 Vai trò cân bằng:</h4>
+          <p>
+            Trong không ít trường hợp, trọng tâm quyền lực nhà nước lại thuộc về một thế lực
+            trung dung có vị thế cân bằng giữa các thế lực đối địch nhau.
+          </p>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ:</h4>
+          <ul>
+            <li>
+              <strong>Thụy Điển, Na Uy, Đan Mạch:</strong>
+              <ul>
+                <li>Đảng Dân chủ Xã hội nắm quyền lâu dài</li>
+                <li>Cân bằng giữa lợi ích tư bản và công nhân</li>
+                <li>Tạo ra mô hình phúc lợi xã hội Bắc Âu</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Canada:</strong>
+              <ul>
+                <li>NDP (New Democratic Party) đóng vai trò cân bằng</li>
+                <li>Ảnh hưởng chính sách dù không nắm quyền</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="trend-box">
+          <h4>📈 Kết quả:</h4>
+          <ul>
+            <li>✅ Thể chế kinh tế, chính trị, xã hội ôn hòa hơn</li>
+            <li>✅ Ít cực đoan hơn so với những thời kỳ trước</li>
+            <li>✅ Giảm bớt xung đột giai cấp trực diện</li>
+            <li>✅ Tạo ảo tưởng về dân chủ tư sản</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>⚠️ Bản chất giai cấp vẫn tồn tại</h3>
+
+        <div className="competition-box">
+          <h4>🚨 Thực chất:</h4>
+          <p>
+            Dù có thể chế đa nguyên, bản chất nhà nước tư sản vẫn là công cụ của giai cấp
+            tư sản độc quyền. Khi quyền lực bị đe dọa, bộ mặt dân chủ sẽ bị lột trần.
+          </p>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ lịch sử:</h4>
+          <ul>
+            <li>
+              <strong>Chile (1973):</strong>
+              <ul>
+                <li>Tổng thống Salvador Allende đắc cử dân chủ</li>
+                <li>Thực hiện cải cách xã hội chủ nghĩa</li>
+                <li>CIA + quân đội Chile đảo chính</li>
+                <li>Độc tài Pinochet: 3,000 người chết, 40,000 bị tra tấn</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Nga (1993):</strong>
+              <ul>
+                <li>Yeltsin ra lệnh pháo kích Nghị viện (White House)</li>
+                <li>Khi Quốc hội không chấp nhận tư nhân hóa cực đoan</li>
+                <li>Hàng trăm người chết</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Thái Lan (2006, 2014):</strong>
+              <ul>
+                <li>Đảo chính quân sự lật đổ chính phủ dân cử</li>
+                <li>Bảo vệ lợi ích tầng lớp quý tộc-quân đội-tư bản</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Sở hữu NN Section
+function SoHuuNNSection() {
+  return (
+    <div className="section">
+      <h2>💰 Sở hữu Nhà nước</h2>
+
+      <ImageGallery
+        title="🏦 Các tổ chức Nhà nước nắm giữ kinh tế"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Temasek_Logo.svg/280px-Temasek_Logo.svg.png', label: 'Temasek (Singapore)', emoji: '🇸🇬' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Federal_Reserve_logo.svg/240px-Federal_Reserve_logo.svg.png', label: 'FED (Mỹ)', emoji: '🇺🇸' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/IMF_logo.svg/240px-IMF_logo.svg.png', label: 'IMF', emoji: '🌐' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/WorldBankGroup.svg/320px-WorldBankGroup.svg.png', label: 'World Bank', emoji: '🏦' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/320px-Flag_of_Europe.svg.png', label: 'ECB (Châu Âu)', emoji: '🇪🇺' },
+        ]}
+      />
+
+      <div className="card">
+        <h3>🏦 Quản lý Ngân sách Nhà nước</h3>
+
+        <div className="mechanism-box">
+          <h4>⚖️ Cơ chế kiểm soát:</h4>
+          <ul>
+            <li><strong>Chi tiêu ngân sách:</strong> Thuộc quyền của giới lập pháp</li>
+            <li><strong>Giới hành pháp:</strong> Bị giới hạn, quản lý chặt chẽ bằng luật</li>
+            <li><strong>Ưu tiên:</strong> Chống lạm phát và chống thất nghiệp</li>
+            <li><strong>Dự trữ quốc gia:</strong> Chỉ sử dụng trong tình huống đặc biệt</li>
+          </ul>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ:</h4>
+          <ul>
+            <li>
+              <strong>Na Uy:</strong>
+              <ul>
+                <li>Government Pension Fund: $1.4 nghìn tỷ (lớn nhất thế giới)</li>
+                <li>Từ dầu khí, đầu tư ra nước ngoài</li>
+                <li>Chỉ được chi tối đa 3% lợi nhuận hàng năm</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Singapore:</strong>
+              <ul>
+                <li>GIC và Temasek: quản lý $1 nghìn tỷ</li>
+                <li>Đầu tư toàn cầu, tạo thu nhập cho ngân sách</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>📊 Cổ phần Nhà nước</h3>
+
+        <div className="definition">
+          Cổ phần của nhà nước trong các ngân hàng và công ty lớn trở thành phổ biến
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Các quốc gia có cổ phần nhà nước cao:</h4>
+          <ul>
+            <li>
+              <strong>Trung Quốc:</strong>
+              <ul>
+                <li>4 ngân hàng lớn nhất: nhà nước nắm 60-70%</li>
+                <li>PetroChina, Sinopec: nhà nước chi phối</li>
+                <li>149/151 công ty top Fortune Global 500 có vốn nhà nước</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Pháp:</strong>
+              <ul>
+                <li>EDF (điện lực): nhà nước 83.6%</li>
+                <li>Renault: nhà nước 15%</li>
+                <li>Air France-KLM: nhà nước 14%</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Đức:</strong>
+              <ul>
+                <li>Deutsche Bahn (đường sắt): 100% nhà nước</li>
+                <li>Deutsche Post, Deutsche Telekom: nhà nước có cổ phần</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>🏗️ Đầu tư Hạ tầng và Khoa học</h3>
+
+        <div className="reason-box">
+          <h4>🔑 Vai trò của nhà nước:</h4>
+          <p>
+            Vai trò của đầu tư nhà nước để khắc phục những chi phí tốn kém trong nghiên cứu
+            khoa học cơ bản, trong xây dựng kết cấu hạ tầng và giải quyết các nhu cầu mang
+            tính xã hội ngày càng tăng lên.
+          </p>
+        </div>
+
+        <div className="method-box">
+          <h4>🎯 Phân công lao động:</h4>
+          <ul>
+            <li><strong>Nhà nước:</strong> Tạo cơ sở vật chất, gánh chịu rủi ro lớn</li>
+            <li><strong>Tư nhân:</strong> Tập trung vào lĩnh vực có lợi nhuận hấp dẫn</li>
+          </ul>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ cụ thể:</h4>
+          <ul>
+            <li>
+              <strong>Internet:</strong>
+              <ul>
+                <li>Nguồn gốc: ARPANET - dự án quân sự Mỹ (1960s)</li>
+                <li>Nhà nước bỏ tiền nghiên cứu cơ bản</li>
+                <li>Tư nhân sau đó khai thác thương mại (Google, Facebook...)</li>
+              </ul>
+            </li>
+            <li>
+              <strong>GPS:</strong>
+              <ul>
+                <li>Lầu Năm Góc đầu tư $12 tỷ phát triển</li>
+                <li>Miễn phí cho dân dụng</li>
+                <li>Tư nhân kiếm tỷ USD từ ứng dụng GPS</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Vaccine COVID-19:</strong>
+              <ul>
+                <li>Chính phủ Mỹ, EU bỏ hàng chục tỷ USD nghiên cứu</li>
+                <li>Pfizer, Moderna thu lợi nhuận khổng lồ</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Hạ tầng giao thông:</strong>
+              <ul>
+                <li>Trung Quốc đầu tư $1.5 nghìn tỷ vào đường sắt cao tốc</li>
+                <li>Tạo điều kiện cho logistics, thương mại phát triển</li>
+                <li>Tư nhân hưởng lợi từ hạ tầng hiện đại</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>💸 Giải cứu Tập đoàn lớn</h3>
+
+        <div className="definition">
+          Trong khủng hoảng kinh tế, ngân sách nhà nước được dùng để cứu những tập đoàn lớn
+          khỏi nguy cơ phá sản: "Tư hữu hóa lợi nhuận, xã hội hóa thua lỗ"
+        </div>
+
+        <div className="case-study">
+          <strong>🏦 Khủng hoảng Tài chính 2008-2009:</strong>
+          <ul>
+            <li>
+              <strong>Citigroup (Mỹ):</strong>
+              <ul>
+                <li>Chính phủ Mỹ bơm $45 tỷ</li>
+                <li>Bảo lãnh $301 tỷ tài sản độc hại</li>
+                <li>Nâng cổ phần lên 36%</li>
+                <li>Lý do: "Too big to fail" (quá lớn không thể để phá sản)</li>
+              </ul>
+            </li>
+            <li>
+              <strong>AIG (Mỹ):</strong>
+              <ul>
+                <li>Giải cứu 2 lần: tổng $150 tỷ</li>
+                <li>Chính phủ kiểm soát 80% cổ phần</li>
+                <li>CEO vẫn nhận bonus hàng triệu USD gây phẫn nộ</li>
+              </ul>
+            </li>
+            <li>
+              <strong>General Motors (Mỹ):</strong>
+              <ul>
+                <li>Phá sản 2009, nhà nước bơm $50 tỷ</li>
+                <li>Tái cơ cấu, giảm 40% công nhân</li>
+                <li>Nhà nước bán lại cổ phiếu 2013: lỗ $10 tỷ</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Royal Bank of Scotland (Anh):</strong>
+              <ul>
+                <li>Chính phủ Anh bơm $145 tỷ</li>
+                <li>Nắm 82% cổ phần</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="significance-box">
+          <h4>💡 Ý nghĩa:</h4>
+          <ul>
+            <li>⚠️ Lợi nhuận về túi tư bản, lỗ thì dân chịu (qua thuế)</li>
+            <li>⚠️ Củng cố độc quyền, loại bỏ đối thủ nhỏ</li>
+            <li>⚠️ Tăng nợ công, cắt giảm phúc lợi xã hội sau đó</li>
+            <li>⚠️ Bất bình đẳng gia tăng</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>🌱 Chi tiêu Xã hội</h3>
+
+        <div className="definition">
+          Tại một số nước, định hướng ưu tiên cho các vấn đề xã hội trong chi tiêu ngân sách
+          nhà nước được luật pháp hóa
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ điển hình:</h4>
+          <ul>
+            <li>
+              <strong>Na Uy:</strong>
+              <ul>
+                <li>Giáo dục miễn phí toàn dân (kể cả đại học)</li>
+                <li>Y tế miễn phí toàn dân</li>
+                <li>Trợ cấp thất nghiệp lên đến 62% lương cũ</li>
+                <li>Nghỉ thai sản 49 tuần 100% lương</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Thụy Điển:</strong>
+              <ul>
+                <li>Chi cho phúc lợi xã hội: 26% GDP</li>
+                <li>Giáo dục, y tế miễn phí</li>
+                <li>Lương hưu cơ bản cho mọi công dân</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Đan Mạch:</strong>
+              <ul>
+                <li>Đất nước hạnh phúc nhất thế giới</li>
+                <li>Phúc lợi xã hội từ nôi đến mồ</li>
+                <li>Trợ cấp sinh viên $1,000/tháng</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="competition-box">
+          <h4>⚠️ Bản chất:</h4>
+          <p>
+            <strong>Không phải do giai cấp tư sản "nhân đạo hóa"!</strong>
+          </p>
+          <ul>
+            <li>✊ Kết quả đấu tranh bền bỉ của giai cấp công nhân</li>
+            <li>✊ Ảnh hưởng của Cách mạng Tháng Mười Nga</li>
+            <li>✊ Sức ép của phong trào công nhân mạnh mẽ</li>
+            <li>✊ "Những sự chuẩn bị vật chất của chủ nghĩa xã hội"</li>
+            <li>⚠️ Đang bị cắt giảm dần do khủng hoảng nợ công</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Điều tiết Section
+function DieuTietSection() {
+  return (
+    <div className="section">
+      <h2>🎛️ Vai trò Công cụ Điều tiết Kinh tế</h2>
+
+      <ImageGallery
+        title="🌐 Các tổ chức Điều tiết Kinh tế Toàn cầu"
+        items={[
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/IMF_logo.svg/240px-IMF_logo.svg.png', label: 'IMF - Tiền tệ Quốc tế', emoji: '🌐' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/WorldBankGroup.svg/320px-WorldBankGroup.svg.png', label: 'World Bank', emoji: '🏦' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/WTO_logo.svg/240px-WTO_logo.svg.png', label: 'WTO', emoji: '🛢️' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Federal_Reserve_logo.svg/240px-Federal_Reserve_logo.svg.png', label: 'FED', emoji: '🇺🇸' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/320px-Flag_of_Europe.svg.png', label: 'ECB', emoji: '🇪🇺' },
+        ]}
+      />
+
+      <div className="card">
+        <h3>⚙️ Công cụ Điều tiết Vĩ mô</h3>
+
+        <div className="definition">
+          Nhà nước tư sản hiện đại là nhân tố quyết định sự ổn định kinh tế vĩ mô
+        </div>
+
+        <div className="method-box">
+          <h4>🛠️ Các công cụ:</h4>
+          <ul>
+            <li><strong>Thu - chi ngân sách:</strong> Chính sách tài khóa mở rộng/thắt chặt</li>
+            <li><strong>Kiểm soát lãi suất:</strong> FED, ECB, BoJ điều chỉnh lãi suất</li>
+            <li><strong>Trợ cấp và trợ giá:</strong> Hỗ trợ ngành, doanh nghiệp chiến lược</li>
+            <li><strong>Kiểm soát tỷ giá:</strong> Can thiệp thị trường ngoại hối</li>
+            <li><strong>Mua sắm công:</strong> Đơn hàng chính phủ, hợp đồng quốc phòng</li>
+            <li><strong>Nới lỏng định lượng (QE):</strong> In tiền mua trái phiếu</li>
+          </ul>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Ví dụ gần đây:</h4>
+          <ul>
+            <li>
+              <strong>COVID-19 (2020-2021):</strong>
+              <ul>
+                <li>Mỹ: $5 nghìn tỷ gói kích thích</li>
+                <li>EU: €750 tỷ gói phục hồi</li>
+                <li>Nhật: ¥117 nghìn tỷ ($1.1 nghìn tỷ)</li>
+                <li>In tiền, trợ cấp, vay lãi suất 0%</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Khủng hoảng 2008:</strong>
+              <ul>
+                <li>FED hạ lãi suất xuống gần 0%</li>
+                <li>QE1, QE2, QE3: mua $4.5 nghìn tỷ tài sản</li>
+                <li>Cứu ngân hàng, kích thích kinh tế</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>🏛️ "Đa nguyên Tư sản"</h3>
+
+        <div className="mechanism-box">
+          <h4>🎭 Bản chất:</h4>
+          <p>
+            Về chính trị, các chính phủ, nghị viện tư sản hiện đại cũng được tổ chức như
+            một công ty cổ phần tư bản chủ nghĩa.
+          </p>
+        </div>
+
+        <div className="reason-box">
+          <h4>🔑 Vai trò của đa đảng:</h4>
+          <ul>
+            <li><strong>Cho phép tham gia:</strong> Đảng đối lập, cả đảng cộng sản được phép</li>
+            <li><strong>Giới hạn:</strong> Chỉ ở mức độ chưa đe dọa quyền lực giai cấp tư sản</li>
+            <li><strong>Mục đích:</strong> Làm dịu làn sóng đấu tranh của nhân dân</li>
+            <li><strong>Hiệu quả:</strong> Suy yếu sức mạnh của lực lượng đối lập</li>
+          </ul>
+        </div>
+
+        <div className="case-study">
+          <strong>📌 Ví dụ:</strong>
+          <ul>
+            <li>
+              <strong>Ý, Pháp, Tây Ban Nha:</strong>
+              <ul>
+                <li>Đảng Cộng sản được phép hoạt động</li>
+                <li>Tham gia bầu cử, có ghế trong nghị viện</li>
+                <li>Nhưng không đủ ghế để thay đổi bản chất hệ thống</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Hy Lạp (2015):</strong>
+              <ul>
+                <li>Syriza (tả cánh) thắng cử</li>
+                <li>Hứa từ chối chính sách thắt lưng buộc bụng</li>
+                <li>Bị EU ép buộc, cuối cùng đầu hàng</li>
+                <li>Thực hiện chính sách cũ, mất dân tín</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="competition-box">
+          <h4>⚠️ Khi quyền lực bị đe dọa:</h4>
+          <p>
+            Nếu xuất hiện nguy cơ bị mất quyền chi phối thì ngay lập tức sẽ:
+          </p>
+          <ul>
+            <li>🚫 Giải tán chính phủ, quốc hội</li>
+            <li>🚫 Thiết quân luật</li>
+            <li>🚫 Tình trạng khẩn cấp</li>
+            <li>🚫 Đảo chính quân sự</li>
+          </ul>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Lịch sử đã chứng minh:</h4>
+          <ul>
+            <li><strong>Chile (1973):</strong> Đảo chính khi Allende xã hội hóa kinh tế</li>
+            <li><strong>Nga (1993):</strong> Yeltsin pháo kích Quốc hội</li>
+            <li><strong>Ukraina (2014):</strong> Maidan - lật đổ chính phủ thân Nga</li>
+            <li><strong>Venezuela (2019):</strong> Mỹ công nhận Guaidó "tổng thống lâm thời"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>🌍 Viện trợ Nước ngoài</h3>
+
+        <div className="definition">
+          Viện trợ cho nước ngoài của chính phủ trở thành một bộ phận của điều tiết kinh tế trong nước
+        </div>
+
+        <div className="mechanism-box">
+          <h4>🔄 Cơ chế hoạt động:</h4>
+          <div className="flow-diagram">
+            <div className="flow-step">
+              <strong>Bước 1:</strong> Chính phủ công bố gói viện trợ
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Bước 2:</strong> Đấu thầu "giới hạn" cho DN trong nước
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Bước 3:</strong> Tập đoàn độc quyền thắng thầu
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-step">
+              <strong>Kết quả:</strong> Lợi nhuận khổng lồ từ tiền thuế
+            </div>
+          </div>
+        </div>
+
+        <div className="reason-box">
+          <h4>🎯 Lợi ích cho tập đoàn:</h4>
+          <ul>
+            <li>Cơ hội lớn mà không có tập đoàn độc quyền nào không quan tâm</li>
+            <li>Phương thuốc cứu nguy khi hàng hóa tồn đọng</li>
+            <li>Giải quyết công nghệ lỗi thời</li>
+            <li>Nâng giá cổ phiếu khi có hợp đồng chính phủ</li>
+          </ul>
+        </div>
+
+        <div className="case-study">
+          <strong>📌 Thực tế viện trợ song phương:</strong>
+          <ul>
+            <li>
+              <strong>Nước tiếp nhận chỉ được:</strong>
+              <ul>
+                <li>10-20% bằng ngoại tệ (tiền mặt)</li>
+                <li>80-90% bằng hàng hóa, thiết bị, chuyên gia từ nước viện trợ</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Ví dụ:</strong>
+              <ul>
+                <li>Mỹ viện trợ $1 tỷ cho châu Phi</li>
+                <li>→ Phải mua lương thực Mỹ (giá cao hơn thị trường)</li>
+                <li>→ Phải thuê tư vấn, chuyên gia Mỹ</li>
+                <li>→ Thực tế chỉ nhận được $300 triệu giá trị</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="example-box">
+          <h4>📌 Các hình thức "viện trợ":</h4>
+          <ul>
+            <li>
+              <strong>USAID (Mỹ):</strong>
+              <ul>
+                <li>Ngân sách $50 tỷ/năm</li>
+                <li>95% hợp đồng cho DN Mỹ</li>
+                <li>Gắn với mục tiêu chính trị</li>
+              </ul>
+            </li>
+            <li>
+              <strong>JICA (Nhật):</strong>
+              <ul>
+                <li>Viện trợ ODA lớn nhất châu Á</li>
+                <li>Ưu tiên dự án hạ tầng lớn</li>
+                <li>Nhà thầu Nhật thắng hầu hết đấu thầu</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Vành đai Con đường (TQ):</strong>
+              <ul>
+                <li>Cho vay $1 nghìn tỷ</li>
+                <li>Nhà thầu TQ, công nhân TQ, vật liệu TQ</li>
+                <li>Nước vay rơi vào bẫy nợ</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="card highlight">
+        <h3>🎓 Kết luận về Độc quyền Nhà nước</h3>
+        <ul className="conclusion-list">
+          <li>✅ Độc quyền nhà nước là bộ mặt mới của CNTB độc quyền</li>
+          <li>✅ Nhà nước là công cụ của giai cấp tư sản độc quyền</li>
+          <li>✅ "Đa nguyên tư sản" là chiêu bài che đậy độc tài giai cấp</li>
+          <li>✅ Ngân sách nhà nước phục vụ lợi ích tư bản độc quyền</li>
+          <li>✅ Giải cứu tập đoàn = xã hội hóa thua lỗ, tư hữu hóa lợi nhuận</li>
+          <li>✅ Phúc lợi xã hội là kết quả đấu tranh, không phải "nhân đạo"</li>
+          <li>✅ Viện trợ nước ngoài = công cụ bành trướng của tư bản độc quyền</li>
+          <li>⚠️ Khi quyền lực bị đe dọa → bạo lực nhà nước bộc lộ</li>
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+// ── DataChartsModal ──────────────────────────────────
+function DataChartsModal({ onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    globalThis.addEventListener('keydown', onKey)
+    return () => globalThis.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  const fdiData = {
+    labels: ['Bắc Mỹ', 'Châu Âu', 'Đông Á', 'Trung Quốc', 'Mỹ Latinh', 'Châu Phi'],
+    datasets: [{
+      label: 'FDI 2023 (tỷ USD)',
+      data: [450, 380, 310, 180, 95, 48],
+      backgroundColor: ['#1565c0', '#0f766e', '#9333ea', '#b45309', '#0369a1', '#b91c1c'],
+      borderRadius: 8,
+      borderSkipped: false,
+    }],
+  }
+
+  const opecData = {
+    labels: ['OPEC (Saudi, UAE, Iraq…)', 'Nga', 'Mỹ', 'Canada', 'Khác'],
+    datasets: [{
+      data: [35, 14, 22, 6, 23],
+      backgroundColor: ['#f59e0b', '#ef4444', '#1565c0', '#0f766e', '#94a3b8'],
+      borderWidth: 3,
+      borderColor: 'white',
+    }],
+  }
+
+  const statsData = [
+    { num: '$13.5T', label: 'Tổng FDI toàn cầu', sub: 'năm 2023', color: '#1565c0' },
+    { num: '30,000+', label: 'Công ty xuyên quốc gia', sub: 'TNCs hiện nay', color: '#0f766e' },
+    { num: '$10T', label: 'AUM BlackRock', sub: 'quản lý tài sản', color: '#9333ea' },
+    { num: '80%', label: 'GPU AI (NVIDIA)', sub: 'độc quyền chip AI', color: '#b45309' },
+  ]
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box charts-box" onClick={e => e.stopPropagation()}>
+        <div className="modal-header" style={{ background: 'linear-gradient(135deg, #1565c0 0%, #0d1b2a 100%)' }}>
+          <div className="modal-header-left">
+            <span className="modal-icon" style={{ background: '#dbeafe' }}>📊</span>
+            <span className="modal-title">Biểu đồ dữ liệu kinh tế thực tế</span>
+          </div>
+          <button className="modal-close" onClick={onClose} aria-label="Đóng">✕</button>
+        </div>
+        <div className="modal-body charts-body">
+
+          <div className="chart-card">
+            <h3 className="chart-title">🌍 Dòng chảy FDI toàn cầu 2023</h3>
+            <p className="chart-sub">Đầu tư trực tiếp nước ngoài theo khu vực (tỷ USD)</p>
+            <div className="chart-wrap">
+              <Bar data={fdiData} options={{
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} tỷ USD` } },
+                },
+                scales: {
+                  y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 11 } } },
+                  x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+                },
+              }} />
+            </div>
+            <p className="chart-note">📌 70% FDI luân chuyển giữa các nước phát triển — minh chứng "Xuất khẩu tư bản" kiểu mới</p>
+          </div>
+
+          <div className="chart-card">
+            <h3 className="chart-title">🛢️ Thị phần sản xuất dầu mỏ thế giới 2024</h3>
+            <p className="chart-sub">Phân chia độc quyền thị trường năng lượng (%)</p>
+            <div className="chart-wrap doughnut-wrap">
+              <Doughnut data={opecData} options={{
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                  legend: { position: 'right', labels: { boxWidth: 14, padding: 12, font: { size: 11 } } },
+                  tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } },
+                },
+                cutout: '58%',
+              }} />
+            </div>
+            <p className="chart-note">📌 OPEC kiểm soát 35% sản lượng dầu thế giới — "Phân chia thị trường thế giới" điển hình</p>
+          </div>
+
+          <div className="chart-card">
+            <h3 className="chart-title">💡 Số liệu nổi bật 2024</h3>
+            <div className="stat-cards">
+              {statsData.map(s => (
+                <div key={s.label} className="stat-card" style={{ '--sc': s.color }}>
+                  <div className="stat-num">{s.num}</div>
+                  <div className="stat-label">{s.label}</div>
+                  <div className="stat-sub">{s.sub}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Timeline ─────────────────────────────────────────
+const TIMELINE_EVENTS = [
+  { year: '1860s–1880s', title: 'Tích lũy ban đầu & CN lần 2', desc: 'Cách mạng công nghiệp lần 2: thép, điện, hóa chất. John D. Rockefeller thành lập Standard Oil (1870) — tập đoàn độc quyền đầu tiên kiểm soát 90% lọc dầu Mỹ.', icon: '⚙️', color: '#1565c0' },
+  { year: '1890–1914', title: 'Đế quốc chủ nghĩa', desc: 'Lenin viết "Chủ nghĩa Đế quốc": tư bản tài chính, xuất khẩu tư bản, phân chia thế giới. Các Cartel quốc tế phân chia thị trường. Chiến tranh thế giới I do mâu thuẫn tái phân chia.', icon: '🌍', color: '#b91c1c' },
+  { year: '1929–1939', title: 'Đại khủng hoảng & New Deal', desc: 'Thị trường chứng khoán sụp đổ 1929. Roosevelt: New Deal — nhà nước can thiệp mạnh, điển hình độc quyền nhà nước. Quốc hữu hóa hàng loạt, tỷ lệ thất nghiệp 25%.', icon: '📉', color: '#9333ea' },
+  { year: '1945–1970', title: 'Chiến tranh Lạnh & Tái thiết', desc: 'Kế hoạch Marshall: Mỹ xuất khẩu $13 tỷ tư bản sang Châu Âu. Hình thành IMF, World Bank, GATT. Mỹ - Liên Xô phân chia phạm vi ảnh hưởng toàn cầu.', icon: '🌐', color: '#0f766e' },
+  { year: '1970s', title: 'Khủng hoảng dầu mỏ & OPEC', desc: '1973: OPEC cấm vận dầu mỏ, giá tăng 400%. Ví dụ điển hình phân chia thị trường. Stagflation — lạm phát + thất nghiệp đồng thời, nhà nước mất kiểm soát.', icon: '🛢️', color: '#b45309' },
+  { year: '1980–1990s', title: 'Toàn cầu hóa & Tư nhân hóa', desc: 'Reagan, Thatcher: tư nhân hóa ồ ạt, bãi bỏ quy định tài chính. WTO thay GATT (1995). Liên Xô tan rã — tư bản độc quyền mở rộng toàn cầu không cản trở.', icon: '🏦', color: '#0369a1' },
+  { year: '2000–2007', title: 'Dotcom & Tổ hợp quân sự', desc: 'Bong bóng dot-com vỡ 2001. Sau 9/11: Mỹ chi $2 nghìn tỷ chiến tranh Iraq/Afghanistan — lợi ích tổ hợp công nghiệp-quân sự (Raytheon, Lockheed). Trung Quốc gia nhập WTO 2001.', icon: '💻', color: '#1d4ed8' },
+  { year: '2008–2009', title: 'Khủng hoảng tài chính toàn cầu', desc: 'Lehman Brothers phá sản. Mỹ bơm $700 tỷ cứu trợ ("Xã hội hóa thua lỗ"). FED QE: in $3.5 nghìn tỷ. Điển hình độc quyền nhà nước cứu tư bản tài chính.', icon: '📊', color: '#dc2626' },
+  { year: '2020s', title: 'Big Tech & AI Monopoly', desc: 'Apple + Microsoft + Google + Amazon + Meta = 25% S&P 500. NVIDIA độc quyền chip AI >80%. ChatGPT, Gemini — tư bản tài chính kỹ thuật số. China vs US Tech War.', icon: '🤖', color: '#6d28d9' },
+]
+
+function TimelineModal({ onClose }) {
+  const [active, setActive] = useState(null)
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    globalThis.addEventListener('keydown', onKey)
+    return () => globalThis.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box timeline-box" onClick={e => e.stopPropagation()}>
+        <div className="modal-header" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #334155 100%)' }}>
+          <div className="modal-header-left">
+            <span className="modal-icon" style={{ background: '#fde68a' }}>⏳</span>
+            <span className="modal-title">Timeline lịch sử Độc quyền Tư bản</span>
+          </div>
+          <button className="modal-close" onClick={onClose} aria-label="Đóng">✕</button>
+        </div>
+        <div className="modal-body timeline-body">
+          <p className="tl-hint">Nhấn vào mốc thời gian để xem chi tiết</p>
+          <div className="timeline">
+            {TIMELINE_EVENTS.map((ev, i) => (
+              <div
+                key={ev.year}
+                className={`tl-item${active === i ? ' active' : ''}`}
+                onClick={() => setActive(active === i ? null : i)}
+              >
+                <div className="tl-dot" style={{ background: ev.color }}>
+                  <span>{ev.icon}</span>
+                </div>
+                <div className="tl-content">
+                  <div className="tl-year" style={{ color: ev.color }}>{ev.year}</div>
+                  <div className="tl-title">{ev.title}</div>
+                  {active === i && <div className="tl-desc">{ev.desc}</div>}
+                </div>
+                <div className="tl-chevron">{active === i ? '▲' : '▼'}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Flashcards ───────────────────────────────────────
+const FLASHCARDS = [
+  { term: 'Độc quyền', def: 'Liên minh giữa các doanh nghiệp lớn nắm phần lớn sản xuất và tiêu thụ, có khả năng định giá độc quyền nhằm thu lợi nhuận siêu ngạch.', example: '🏭 VD: NVIDIA nắm >80% thị phần GPU AI', color: '#1565c0' },
+  { term: 'Tư bản Tài chính', def: 'Tư bản hình thành từ sự dung hợp giữa tư bản ngân hàng độc quyền và tư bản công nghiệp độc quyền, nắm trong tay các nhà tư bản tài chính.', example: '🏦 VD: BlackRock ($10T AUM), JPMorgan Chase', color: '#9333ea' },
+  { term: 'Đầu sỏ Tài chính', def: 'Tầng lớp nhà tư sản tài chính nắm quyền thống trị kinh tế-chính trị thông qua tư bản tài chính và cơ chế tham dự.', example: '👑 VD: Warren Buffett, Larry Fink (BlackRock CEO)', color: '#b45309' },
+  { term: 'Cơ chế Tham dự', def: 'Công ty mẹ nắm cổ phần chi phối công ty con, công ty con nắm cổ phần công ty cháu theo dây chuyền — kiểm soát tài sản khổng lồ với ít vốn ban đầu.', example: '🏗️ VD: Berkshire Hathaway kiểm soát 60+ công ty', color: '#0f766e' },
+  { term: 'Concern', def: 'Hình thức tổ chức độc quyền kết hợp nhiều doanh nghiệp thuộc nhiều ngành kinh doanh khác nhau dưới sự kiểm soát tài chính của một tập đoàn lớn.', example: '🏢 VD: Samsung, LG, General Electric', color: '#0369a1' },
+  { term: 'Conglomerate', def: 'Tập đoàn đa dạng hóa hoạt động sang các lĩnh vực hoàn toàn không liên quan, nhằm giảm rủi ro và tận dụng sức mạnh tài chính tổng hợp.', example: '📦 VD: Berkshire Hathaway (bảo hiểm + đường sắt + ngân hàng)', color: '#b91c1c' },
+  { term: 'Xuất khẩu Tư bản', def: 'Đưa tư bản ra nước ngoài để sản xuất và thu giá trị thặng dư tại nước nhận đầu tư — khác với xuất khẩu hàng hóa thông thường.', example: '🌍 VD: Apple đặt nhà máy tại Trung Quốc, Ấn Độ, Việt Nam', color: '#047857' },
+  { term: 'Revolving Door', def: '"Cửa quay" — cơ chế luân chuyển nhân sự giữa tập đoàn tư nhân và bộ máy nhà nước, đảm bảo lợi ích tư bản độc quyền được bảo vệ từ bên trong nhà nước.', example: '🔄 VD: Bộ trưởng Tài chính Mỹ ← cựu CEO Goldman Sachs', color: '#1d4ed8' },
+  { term: 'Lợi nhuận Độc quyền', def: 'Lợi nhuận siêu ngạch thu được nhờ vị thế thống trị thị trường, vượt xa lợi nhuận bình quân trong cạnh tranh tự do.', example: '💰 VD: Apple biên LN 25–30% (TB ngành 5–8%)', color: '#b45309' },
+  { term: 'Quốc hữu hóa', def: 'Nhà nước tiếp nhận quyền sở hữu doanh nghiệp tư nhân — thường trong khủng hoảng để cứu trợ — rồi tư nhân hóa khi ổn định (xã hội hóa thua lỗ, tư hữu hóa lợi nhuận).', example: '🏛️ VD: Mỹ cứu AIG & GM năm 2008–2009', color: '#6d28d9' },
+]
+
+function FlashcardsModal({ onClose }) {
+  const [current, setCurrent] = useState(0)
+  const [flipped, setFlipped] = useState(false)
+  const total = FLASHCARDS.length
+  const card = FLASHCARDS[current]
+
+  const next = () => { setCurrent(c => (c + 1) % total); setFlipped(false) }
+  const prev = () => { setCurrent(c => (c - 1 + total) % total); setFlipped(false) }
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight') next()
+      if (e.key === 'ArrowLeft') prev()
+      if (e.key === ' ') { e.preventDefault(); setFlipped(f => !f) }
+    }
+    globalThis.addEventListener('keydown', onKey)
+    return () => globalThis.removeEventListener('keydown', onKey)
+  }, [onClose, current])
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box fc-box" onClick={e => e.stopPropagation()}>
+        <div className="modal-header" style={{ background: `linear-gradient(135deg, ${card.color} 0%, #0d1b2a 100%)` }}>
+          <div className="modal-header-left">
+            <span className="modal-icon" style={{ background: '#fde68a' }}>🃏</span>
+            <span className="modal-title">Flashcard — Thuật ngữ quan trọng</span>
+          </div>
+          <button className="modal-close" onClick={onClose} aria-label="Đóng">✕</button>
+        </div>
+        <div className="modal-body fc-body">
+          <div className="fc-top">
+            <span className="fc-counter">{current + 1} / {total}</span>
+          </div>
+          <div className="fc-progress">
+            <div className="fc-progress-fill" style={{ width: `${(current + 1) / total * 100}%`, background: card.color }} />
+          </div>
+
+          <div className="fc-scene" onClick={() => setFlipped(f => !f)}>
+            <div className={`fc-card${flipped ? ' flipped' : ''}`}>
+              <div className="fc-face fc-front" style={{ borderTop: `4px solid ${card.color}` }}>
+                <div className="fc-badge" style={{ background: card.color }}>THUẬT NGỮ</div>
+                <div className="fc-term">{card.term}</div>
+                <div className="fc-hint">👆 Nhấn để xem định nghĩa</div>
+              </div>
+              <div className="fc-face fc-back" style={{ background: card.color }}>
+                <div className="fc-badge" style={{ background: 'rgba(255,255,255,.25)', color: 'white' }}>ĐỊNH NGHĨA</div>
+                <div className="fc-definition">{card.def}</div>
+                <div className="fc-example">{card.example}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="fc-nav">
+            <button className="fc-nav-btn" onClick={prev}>← Trước</button>
+            <button className="fc-flip-btn" style={{ background: card.color }} onClick={() => setFlipped(f => !f)}>
+              {flipped ? '🔄 Lật lại' : '👆 Xem định nghĩa'}
+            </button>
+            <button className="fc-nav-btn" onClick={next}>Tiếp →</button>
+          </div>
+          <p className="fc-keys">← → điều hướng · Space lật thẻ · Esc đóng</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Countdown Timer Widget ───────────────────────────
+function CountdownTimer({ onClose }) {
+  const [totalSecs, setTotalSecs] = useState(10 * 60)
+  const [left, setLeft] = useState(10 * 60)
+  const [running, setRunning] = useState(false)
+  const [editMin, setEditMin] = useState('10')
+
+  useEffect(() => {
+    if (!running || left <= 0) return
+    const id = setTimeout(() => setLeft(l => l - 1), 1000)
+    return () => clearTimeout(id)
+  }, [running, left])
+
+  useEffect(() => {
+    if (left === 0 && running) {
+      setRunning(false)
+      playSound('wrong')
+    }
+  }, [left, running])
+
+  const mm = String(Math.floor(left / 60)).padStart(2, '0')
+  const ss = String(left % 60).padStart(2, '0')
+  const pct = totalSecs > 0 ? (left / totalSecs) * 100 : 0
+  const isRed = left < 120 && left > 0
+  const isDone = left === 0
+
+  const applyTime = () => {
+    const m = Math.max(1, Math.min(99, parseInt(editMin) || 10))
+    const secs = m * 60
+    setTotalSecs(secs)
+    setLeft(secs)
+    setRunning(false)
+  }
+
+  return (
+    <div className="timer-widget">
+      <div className="timer-header">
+        <span className="timer-title">⏱ Đếm ngược</span>
+        <button className="timer-close" onClick={onClose}>✕</button>
+      </div>
+      <div className={`timer-display${isRed ? ' red' : ''}${isDone ? ' done' : ''}`}>
+        {isDone ? '⏰ Hết giờ!' : `${mm}:${ss}`}
+      </div>
+      <div className="timer-bar-track">
+        <div
+          className="timer-bar-fill"
+          style={{ width: `${pct}%`, background: isRed ? '#ef4444' : '#1565c0' }}
+        />
+      </div>
+      <div className="timer-set-row">
+        <input
+          className="timer-input"
+          type="number" min="1" max="99"
+          value={editMin}
+          onChange={e => setEditMin(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && applyTime()}
+        />
+        <span className="timer-unit">phút</span>
+        <button className="timer-set-btn" onClick={applyTime}>✓ Đặt</button>
+      </div>
+      <div className="timer-btns">
+        <button
+          className={`timer-action-btn ${running ? 'pause' : 'play'}`}
+          onClick={() => !isDone && setRunning(r => !r)}
+          disabled={isDone}
+        >
+          {running ? '⏸ Dừng' : '▶ Bắt đầu'}
+        </button>
+        <button
+          className="timer-action-btn reset"
+          onClick={() => { setLeft(totalSecs); setRunning(false) }}
+        >
+          ↺ Reset
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ── Slideshow Mode ────────────────────────────────────
+function SlideshowMode({ sections, onClose }) {
+  const [idx, setIdx] = useState(0)
+  const total = sections.length
+  const s = sections[idx]
+  const SectionComp = s.Component
+  const pct = ((idx + 1) / total) * 100
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') setIdx(i => Math.min(i + 1, total - 1))
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') setIdx(i => Math.max(i - 1, 0))
+    }
+    globalThis.addEventListener('keydown', onKey)
+    return () => globalThis.removeEventListener('keydown', onKey)
+  }, [onClose, total])
+
+  return (
+    <div className="ss-overlay">
+      <div className="ss-topbar">
+        <div className="ss-info">
+          <span className="ss-count">{idx + 1} / {total}</span>
+          <div className="ss-progress"><div className="ss-progress-fill" style={{ width: `${pct}%` }} /></div>
+        </div>
+        <div className="ss-topbar-title">{s.icon} {s.title}</div>
+        <button className="ss-exit-btn" onClick={onClose}>✕ Thoát (Esc)</button>
+      </div>
+
+      <div className="ss-slide" key={idx}>
+        <div className="ss-slide-inner">
+          <div className="ss-slide-header" style={{ borderLeftColor: s.color }}>
+            <span className="ss-slide-icon" style={{ background: s.colorBg, color: s.color }}>{s.icon}</span>
+            <div>
+              <div className="ss-slide-title" style={{ color: s.color }}>{s.title}</div>
+              <div className="ss-slide-sub">{s.desc}</div>
+            </div>
+          </div>
+          <div className="ss-slide-body">
+            <SectionComp />
+          </div>
+        </div>
+      </div>
+
+      <div className="ss-nav">
+        <button
+          className="ss-nav-btn"
+          onClick={() => setIdx(i => Math.max(i - 1, 0))}
+          disabled={idx === 0}
+        >← Trước</button>
+        <div className="ss-dots">
+          {sections.map((sec, i) => (
+            <button
+              key={sec.id}
+              className={`ss-dot ${i === idx ? 'active' : ''}`}
+              style={i === idx ? { background: s.color, borderColor: s.color } : {}}
+              onClick={() => setIdx(i)}
+              title={sec.title}
+            />
+          ))}
+        </div>
+        <button
+          className="ss-nav-btn"
+          onClick={() => setIdx(i => Math.min(i + 1, total - 1))}
+          disabled={idx === total - 1}
+        >Tiếp →</button>
+      </div>
+    </div>
+  )
+}
+
+// ===== AI CHAT DATA =====
+const AI_QA = [
+  {
+    keywords: ['tích tụ', 'tập trung', 'concern', 'conglomerate', 'consortium', 'cartel', 'trust'],
+    answer: '🏭 **Tích tụ & Tập trung tư bản** là biểu hiện đầu tiên của độc quyền mới. Các hình thức tổ chức gồm: **Concern** (tập đoàn đa ngành), **Conglomerate** (liên hợp đa dạng), **Consortium** (liên minh tài chính), **Cartel** và **Trust**. Ví dụ: Samsung, LG là các Concern điển hình của Hàn Quốc.',
+  },
+  {
+    keywords: ['tài chính', 'ngân hàng', 'đầu sỏ', 'tư bản tài chính', 'quả đấm thép'],
+    answer: '💰 **Tư bản tài chính** là sự dung hợp giữa tư bản ngân hàng độc quyền và tư bản công nghiệp độc quyền. Tạo ra tầng lớp **đầu sỏ tài chính** nắm quyền kiểm soát kinh tế. Ví dụ: JPMorgan Chase, Goldman Sachs kiểm soát hàng nghìn công ty qua sở hữu cổ phần.',
+  },
+  {
+    keywords: ['xuất khẩu tư bản', 'fdi', 'đầu tư nước ngoài', 'xuất khẩu'],
+    answer: '🌐 **Xuất khẩu tư bản** là đưa tư bản ra nước ngoài để thu lợi nhuận siêu ngạch. Gồm 2 hình thức: **Đầu tư trực tiếp (FDI)** – xây nhà máy, mua cổ phần kiểm soát; **Đầu tư gián tiếp (FPI)** – mua trái phiếu, cổ phiếu. Mục đích: khai thác tài nguyên và lao động rẻ.',
+  },
+  {
+    keywords: ['thị trường', 'phân chia thị trường', 'wto', 'opec'],
+    answer: '🗺️ **Phân chia thị trường thế giới**: Các tổ chức độc quyền quốc tế phân chia thị trường tiêu thụ và nguồn cung. Ví dụ: **OPEC** kiểm soát thị trường dầu mỏ; các Cartel trong ngành dược, chip bán dẫn phân chia thị phần toàn cầu.',
+  },
+  {
+    keywords: ['lãnh thổ', 'phân chia lãnh thổ', 'thuộc địa', 'ảnh hưởng'],
+    answer: '🌍 **Phân chia lãnh thổ ảnh hưởng**: Thay vì thuộc địa trực tiếp, nay dùng **"ngoại giao nợ"** (Belt & Road Initiative), căn cứ quân sự, hiệp định thương mại ưu đãi để kiểm soát các nước nhỏ. Đây là hình thức thuộc địa kiểu mới.',
+  },
+  {
+    keywords: ['độc quyền nhà nước', 'nhà nước tư sản', 'can thiệp nhà nước'],
+    answer: '🏛️ **Độc quyền Nhà nước** (State Monopoly Capitalism) là sự kết hợp giữa tư bản độc quyền tư nhân với bộ máy nhà nước, tạo cơ chế thống nhất phục vụ lợi ích tư bản độc quyền và duy trì chủ nghĩa tư bản trước các mâu thuẫn nội tại.',
+  },
+  {
+    keywords: ['nhân sự', 'quan hệ nhân sự', 'cửa quay', 'revolving door'],
+    answer: '👔 **Cơ chế "Cửa quay"** (Revolving Door): quan chức chính phủ sau khi nghỉ hưu vào làm tập đoàn lớn, và ngược lại CEO sang làm quan chức nhà nước. Ví dụ ở Mỹ: Bộ trưởng Tài chính từng là CEO Goldman Sachs; Bộ trưởng Quốc phòng từng lãnh đạo Raytheon.',
+  },
+  {
+    keywords: ['sở hữu nhà nước', 'quốc hữu hóa', 'doanh nghiệp nhà nước', 'tư nhân hóa'],
+    answer: '🏗️ **Sở hữu Nhà nước**: Nhà nước nắm giữ các doanh nghiệp chiến lược. Chu kỳ: **quốc hữu hóa** khi khủng hoảng (cứu vớt), rồi **tư nhân hóa** khi ổn định (chuyển lợi ích cho tư bản). Ví dụ: cứu trợ AIG, GM năm 2008-2009.',
+  },
+  {
+    keywords: ['điều tiết', 'công cụ điều tiết', 'chính sách', 'fed', 'lãi suất', 'ngân sách'],
+    answer: '⚙️ **Công cụ điều tiết vĩ mô**: **Chính sách tài khóa** (thu-chi ngân sách); **Chính sách tiền tệ** (FED tăng/giảm lãi suất); **Nới lỏng định lượng QE** (in tiền mua trái phiếu); **Trợ cấp** ngành chiến lược; **Mua sắm công** (hợp đồng quốc phòng).',
+  },
+  {
+    keywords: ['độc quyền là gì', 'khái niệm', 'định nghĩa', 'là gì'],
+    answer: '📚 **Độc quyền** là liên minh giữa các doanh nghiệp lớn nắm phần lớn sản xuất và tiêu thụ một loại hàng hóa, có khả năng định giá độc quyền để thu lợi nhuận cao. Theo Lenin, độc quyền xuất hiện khi tích tụ và tập trung tư bản đạt trình độ cao.',
+  },
+  {
+    keywords: ['ví dụ', 'thực tế', 'hiện nay', 'ngày nay', 'thế kỷ 21'],
+    answer: '🌟 **Ví dụ thực tế ngày nay**: Apple, Microsoft, Google, Amazon, Meta – 5 công ty chiếm hơn 25% vốn hóa S&P 500. TSMC độc quyền chip tiên tiến. NVIDIA kiểm soát >80% thị trường GPU AI. Đây là biểu hiện rõ nhất của tích tụ & tập trung tư bản thế kỷ XXI.',
+  },
+]
+
+function getAiAnswer(question) {
+  const q = question.toLowerCase()
+  for (const item of AI_QA) {
+    if (item.keywords.some(kw => q.includes(kw))) {
+      return item.answer
+    }
+  }
+  return '🤔 Tôi chưa có câu trả lời cho câu hỏi này. Hãy thử hỏi về: **tích tụ tư bản**, **tư bản tài chính**, **xuất khẩu tư bản**, **phân chia thị trường**, **phân chia lãnh thổ**, **độc quyền nhà nước**, **quan hệ nhân sự**, **sở hữu nhà nước**, hoặc **công cụ điều tiết**.'
+}
+
+// ===== AI CHAT COMPONENT =====
+let msgIdCounter = 0
+
+function AiChat() {
+  const [open, setOpen] = useState(false)
+  const [messages, setMessages] = useState([
+    { id: ++msgIdCounter, from: 'ai', text: '👋 Xin chào! Tôi là trợ lý AI của bài học.\nBạn có thể hỏi tôi về bất kỳ nội dung nào trong bài **Biểu hiện mới của Độc quyền**!' }
+  ])
+  const [input, setInput] = useState('')
+
+  const send = (question) => {
+    const trimmed = question.trim()
+    if (!trimmed) return
+    setMessages(prev => [
+      ...prev,
+      { id: ++msgIdCounter, from: 'user', text: trimmed },
+      { id: ++msgIdCounter, from: 'ai', text: getAiAnswer(trimmed) }
+    ])
+    setInput('')
+    setTimeout(() => {
+      const el = document.getElementById('ai-chat-messages')
+      if (el) el.scrollTop = el.scrollHeight
+    }, 60)
+  }
+
+  const quickQuestions = [
+    'Tích tụ tư bản là gì?',
+    'Tư bản tài chính?',
+    'Xuất khẩu tư bản?',
+    'Độc quyền nhà nước?',
+  ]
+
+  return (
+    <>
+      {/* Floating AI Button */}
+      <button
+        className={`ai-fab ${open ? 'ai-fab-open' : ''}`}
+        onClick={() => setOpen(!open)}
+        aria-label="Trợ lý AI học tập"
+      >
+        {open ? (
+          <span className="ai-fab-close">✕</span>
+        ) : (
+          <>
+            <svg className="ai-fab-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="12" y="20" width="40" height="28" rx="9" fill="white" fillOpacity="0.95" />
+              <circle cx="23" cy="34" r="4.5" fill="#667eea" />
+              <circle cx="41" cy="34" r="4.5" fill="#764ba2" />
+              <rect x="25" y="41" width="14" height="3" rx="1.5" fill="#667eea" />
+              <rect x="28" y="12" width="8" height="10" rx="4" fill="white" fillOpacity="0.9" />
+              <circle cx="32" cy="7" r="3" fill="#ffd700" />
+              <rect x="3" y="26" width="9" height="7" rx="3.5" fill="white" fillOpacity="0.85" />
+              <rect x="52" y="26" width="9" height="7" rx="3.5" fill="white" fillOpacity="0.85" />
+            </svg>
+            <span className="ai-fab-label">Hỏi AI</span>
+          </>
+        )}
+      </button>
+
+      {/* Chat Window */}
+      {open && (
+        <div className="ai-chat-window">
+          <div className="ai-chat-header">
+            <div className="ai-chat-header-left">
+              <div className="ai-chat-avatar">🤖</div>
+              <div>
+                <div className="ai-chat-title">Trợ lý AI Học tập</div>
+                <div className="ai-chat-status">● Đang hoạt động</div>
+              </div>
+            </div>
+            <button className="ai-chat-header-close" onClick={() => setOpen(false)}>✕</button>
+          </div>
+
+          <div className="ai-chat-messages" id="ai-chat-messages">
+            {messages.map((msg) => (
+              <div key={msg.id} className={`ai-msg ai-msg-${msg.from}`}>
+                {msg.from === 'ai' && <div className="ai-msg-avatar">🤖</div>}
+                <div
+                  className="ai-msg-bubble"
+                  dangerouslySetInnerHTML={{
+                    __html: msg.text
+                      .replaceAll(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                      .replaceAll('\n', '<br/>')
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="ai-quick-questions">
+            {quickQuestions.map((q) => (
+              <button key={q} className="ai-quick-btn" onClick={() => send(q)}>
+                {q}
+              </button>
+            ))}
+          </div>
+
+          <div className="ai-chat-input-row">
+            <input
+              className="ai-chat-input"
+              type="text"
+              placeholder="Nhập câu hỏi..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); send(input) } }}
+              autoFocus
+            />
+            <button className="ai-chat-send" onClick={() => send(input)} aria-label="Gửi">➤</button>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+export default App
