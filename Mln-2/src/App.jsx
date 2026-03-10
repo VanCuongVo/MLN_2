@@ -730,9 +730,14 @@ function ImageGallery({ title, items }) {
       <div className="gallery-grid">
         {items.map((item, i) => (
           <div key={i} className="gallery-item">
-            <div className="gallery-img-wrap">
+            <div
+              className="gallery-img-wrap"
+              style={failed[i] ? { background: item.bg ?? '#1b2d45', border: 'none' } : { background: '#fff' }}
+            >
               {failed[i] ? (
-                <div className="carousel-fallback">{item.emoji ?? '🏢'}</div>
+                <div className="gallery-brand-card">
+                  <span className="gallery-brand-emoji">{item.emoji ?? '🏢'}</span>
+                </div>
               ) : (
                 <img
                   src={item.src}
@@ -757,50 +762,162 @@ function IntroSection() {
     <div className="section">
       <h2>📚 Tổng quan về Độc quyền mới</h2>
 
+      {/* Slide 1: Khái niệm */}
+      <div className="card highlight">
+        <h3>1️⃣ Khái niệm</h3>
+        <p>
+          <strong>Độc quyền</strong> là sự tập trung sản xuất và tư bản ở mức độ cao, hình thành
+          các tập đoàn kinh tế lớn có khả năng <strong>chi phối thị trường và nền kinh tế</strong>.
+        </p>
+        <p style={{ marginTop: '.6rem' }}>
+          Trong thời đại hiện nay, độc quyền không chỉ tồn tại trong phạm vi quốc gia mà còn
+          mở rộng ra toàn cầu, gắn với sự phát triển của <strong>khoa học công nghệ</strong> và{' '}
+          <strong>toàn cầu hóa kinh tế</strong>.
+        </p>
+        <div className="slide-examples" style={{ marginTop: '.8rem' }}>
+          <span>🏭 Tập trung sản xuất</span>
+          <span style={{ background: 'none', border: 'none', color: 'var(--text)' }}>➕</span>
+          <span>💰 Tập trung tư bản</span>
+          <span style={{ background: 'none', border: 'none', color: 'var(--text)' }}>➡️</span>
+          <span>🏛️ Tập đoàn chi phối kinh tế</span>
+        </div>
+
+      </div>
+
+      {/* Slide 2: Biểu hiện chính */}
+      <div className="card">
+        <h3>2️⃣ Biểu hiện chính của độc quyền hiện đại</h3>
+        <div className="slide-two-col">
+          <div>
+            <ul className="slide-bullets">
+              <li>
+                <strong>1️⃣ Tích tụ và tập trung tư bản</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>→ Hình thành tập đoàn kinh tế lớn và đa ngành</span>
+              </li>
+              <li>
+                <strong>2️⃣ Vai trò của tư bản tài chính</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>→ Kết hợp ngân hàng + công nghiệp, kiểm soát qua cổ phiếu</span>
+              </li>
+              <li>
+                <strong>3️⃣ Xuất khẩu tư bản</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>→ Các nước phát triển đầu tư vốn ra nước ngoài (FDI)</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <ul className="slide-bullets">
+              <li>
+                <strong>4️⃣ Phân chia thị trường thế giới</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>→ Tập đoàn lớn cạnh tranh và chiếm lĩnh thị trường toàn cầu</span>
+              </li>
+              <li>
+                <strong>5️⃣ Phân chia phạm vi ảnh hưởng</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>→ Cường quốc và tập đoàn mở rộng ảnh hưởng kinh tế – tài chính</span>
+              </li>
+            </ul>
+            <div className="speaker-note" style={{ marginTop: '.8rem' }}>
+              💡 <strong>Mẹo:</strong> Slide chỉ ghi từ khóa. Khi nói thì giải thích thêm ví dụ.
+            </div>
+          </div>
+        </div>
+        <div className="speaker-note">
+          🎤 <strong>Nói:</strong> Độc quyền hiện đại có 5 biểu hiện chính. Mỗi biểu hiện sẽ được nhóm em trình bày chi tiết ở các phần sau. Ở đây em chỉ giới thiệu tổng quan để thầy/cô và các bạn có cái nhìn toàn cảnh trước.
+        </div>
+      </div>
+
+      {/* Slide 3: Ví dụ thực tế */}
+      <div className="card">
+        <h3>3️⃣ Ví dụ thực tế — Các tập đoàn độc quyền lớn</h3>
+        <div className="slide-two-col">
+          <div>
+            <p className="slide-col-head">Công nghệ số</p>
+            <ul className="slide-bullets">
+              <li>
+                <strong>Google (Alphabet):</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>tìm kiếm · quảng cáo · cloud · AI · YouTube · Android</span>
+                <br /><a href="https://en.wikipedia.org/wiki/Alphabet_Inc." target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a>
+              </li>
+              <li>
+                <strong>Amazon:</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>thương mại điện tử · AWS cloud · logistics · truyền thông</span>
+                <br /><a href="https://en.wikipedia.org/wiki/Amazon_(company)" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a>
+              </li>
+              <li>
+                <strong>Microsoft:</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>phần mềm · cloud Azure · gaming · LinkedIn · OpenAI</span>
+                <br /><a href="https://en.wikipedia.org/wiki/Microsoft" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a>
+              </li>
+              <li>
+                <strong>Apple:</strong>
+                <br /><span style={{ color: 'rgba(220,230,240,.6)', fontSize: '.8rem' }}>thiết bị · App Store · dịch vụ tài chính · streaming</span>
+                <br /><a href="https://en.wikipedia.org/wiki/Apple_Inc." target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="slide-col-head">Tại sao đây là độc quyền?</p>
+            <ul className="slide-bullets">
+              <li>Google chiếm <strong>~92%</strong> thị phần tìm kiếm toàn cầu&nbsp;<a href="https://gs.statcounter.com/search-engine-market-share" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 statcounter.com</a></li>
+              <li>Amazon chiếm <strong>~38%</strong> thị phần thương mại điện tử Mỹ&nbsp;<a href="https://en.wikipedia.org/wiki/Amazon_(company)" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
+              <li>Microsoft + Google kiểm soát <strong>~60%</strong> thị trường cloud&nbsp;<a href="https://en.wikipedia.org/wiki/Cloud_computing#Providers" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
+              <li>Apple thu về <strong>~85%</strong> lợi nhuận toàn bộ ngành smartphone&nbsp;<a href="https://en.wikipedia.org/wiki/Apple_Inc." target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
+            </ul>
+            <div className="slide-examples" style={{ marginTop: '.8rem' }}>
+              <span>📊 Thị phần khổng lồ</span>
+              <span>🌐 Hoạt động toàn cầu</span>
+              <span>💰 Lợi nhuận cực lớn</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Slide 4: Sơ đồ minh họa */}
+      <div className="card">
+        <h3>4️⃣ Sơ đồ minh họa — Độc quyền hiện đại</h3>
+        <div className="org-chart">
+          <div className="org-top">
+            <div className="org-box org-main">🏛️ Độc quyền hiện đại</div>
+          </div>
+          <div className="org-arrow-down">↓</div>
+          <div className="org-mid">
+            <div className="org-box org-sub">🏢 Tập đoàn<br /><small>kinh tế lớn</small></div>
+            <div className="org-box org-sub">💰 Tư bản<br /><small>tài chính</small></div>
+            <div className="org-box org-sub">🌍 Công ty<br /><small>xuyên quốc gia</small></div>
+          </div>
+          <div className="org-arrow-down">↓</div>
+          <div className="org-bottom">
+            <div className="org-box org-small">📈 Ảnh hưởng kinh tế toàn cầu</div>
+          </div>
+          <div className="org-arrow-down">↓</div>
+          <div className="org-final">
+            <div className="org-box org-chain">🌐 Chi phối thị trường & nền kinh tế thế giới</div>
+          </div>
+        </div>
+
+        <p className="slide-col-head" style={{ marginTop: '1rem' }}>📊 Đặc điểm của độc quyền thời đại mới</p>
+        <div className="slide-examples">
+          <span>🌐 Toàn cầu hóa</span>
+          <span>💻 Cách mạng KH-CN</span>
+          <span>🏢 TNCs</span>
+          <span>🤝 Liên minh kinh tế</span>
+          <span>📱 Kinh tế số</span>
+        </div>
+
+        <div className="speaker-note">
+          🎤 <strong>Câu kết:</strong> Tóm lại, độc quyền trong thời đại mới không còn giới hạn trong một quốc gia hay một ngành. Các tập đoàn lớn liên kết với tư bản tài chính, vươn ra toàn cầu và chi phối cả nền kinh tế thế giới. Đây là cơ sở để chúng ta hiểu các phần tiếp theo.
+        </div>
+      </div>
+
       <ImageGallery
         title="🌎 Các tập đoàn độc quyền hàng đầu thế giới"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/320px-Google_2015_logo.svg.png', label: 'Google / Alphabet', emoji: '🔍' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/320px-Amazon_logo.svg.png', label: 'Amazon', emoji: '📦' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/320px-Microsoft_logo.svg.png', label: 'Microsoft', emoji: '💻' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/320px-Netflix_2015_logo.svg.png', label: 'Netflix', emoji: '🎥' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Above_Gotham.png/240px-Above_Gotham.png', label: 'NYC Finance Hub', emoji: '🏙️' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://about.google&size=256', label: 'Google / Alphabet', emoji: '🔍', bg: '#4285F4' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://amazon.com&size=256', label: 'Amazon', emoji: '📦', bg: '#FF9900' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://microsoft.com&size=256', label: 'Microsoft', emoji: '💻', bg: '#00BCF2' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://apple.com&size=256', label: 'Apple', emoji: '🍎', bg: '#555555' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://meta.com&size=256', label: 'Meta', emoji: '🌐', bg: '#0866FF' },
         ]}
       />
-
-      <div className="card highlight">
-        <h3>🎯 Khái niệm cốt lõi</h3>
-        <p>
-          Độc quyền là sự tập trung sản xuất và tư bản đến mức độ cao, tạo ra các tổ chức
-          kinh tế có sức mạnh chi phối thị trường và nền kinh tế. Trong điều kiện hiện đại,
-          độc quyền có những biểu hiện mới phản ánh sự phát triển của lực lượng sản xuất
-          và khoa học công nghệ.
-        </p>
-      </div>
-
-      <div className="card-grid">
-        <div className="card">
-          <h3>🔍 5 Biểu hiện chính</h3>
-          <ul className="feature-list">
-            <li>✅ Tích tụ và tập trung tư bản</li>
-            <li>✅ Vai trò tư bản tài chính</li>
-            <li>✅ Xuất khẩu tư bản</li>
-            <li>✅ Phân chia thị trường thế giới</li>
-            <li>✅ Phân chia lãnh thổ ảnh hưởng</li>
-          </ul>
-        </div>
-
-        <div className="card">
-          <h3>📊 Đặc điểm thời đại mới</h3>
-          <ul className="feature-list">
-            <li>🌐 Toàn cầu hóa kinh tế</li>
-            <li>💻 Cách mạng khoa học công nghệ</li>
-            <li>🏢 Công ty xuyên quốc gia (TNCs)</li>
-            <li>🤝 Liên minh kinh tế khu vực</li>
-            <li>📱 Nền kinh tế số</li>
-          </ul>
-        </div>
-      </div>
     </div>
   )
 }
@@ -818,7 +935,7 @@ function TichTuSection() {
           <li>Trước đây, doanh nghiệp chủ yếu phát triển trong <strong>một ngành</strong>, <strong>một quốc gia</strong></li>
           <li>Ngày nay, do toàn cầu hóa và công nghệ, các tập đoàn mở rộng ra <strong>nhiều ngành – nhiều quốc gia</strong></li>
           <li>Xuất hiện hình thức tổ chức độc quyền mới: <strong>Concern</strong> và <strong>Conglomerate</strong></li>
-          <li>Doanh nghiệp vừa và nhỏ vẫn tồn tại nhưng <strong>liên kết, phụ thuộc</strong> tập đoàn lớn</li>
+          <li>Doanh nghiệp vừa và nhỏ vẫn tồn tại nhưng <strong>liên kết, phụ thuộc</strong> tập đoàn lớn&nbsp;<a href="https://kinhtetieudung.vn/khi-doanh-nghiep-nho-dong-vai-tro-lon-trong-nen-kinh-te-a22512.html" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 kinhtetieudung.vn</a></li>
         </ul>
         <div className="slide-examples">
           <span>Samsung</span><span>Berkshire Hathaway</span><span>Toyota Group</span><span>Vingroup</span>
@@ -838,9 +955,9 @@ function TichTuSection() {
           <div>
             <p className="slide-col-head">📌 Ví dụ cụ thể</p>
             <ul className="slide-bullets">
-              <li><strong>Samsung (Hàn Quốc):</strong><br />điện tử · đóng tàu · xây dựng · bảo hiểm · khách sạn</li>
-              <li><strong>General Electric (Mỹ):</strong><br />hàng không · y tế · năng lượng · tài chính</li>
-              <li><strong>Siemens (Đức):</strong><br />điện tử · giao thông · y tế · năng lượng</li>
+              <li><strong>Samsung (Hàn Quốc):</strong><br />điện tử · đóng tàu · xây dựng · bảo hiểm · khách sạn<br /><a href="https://timviec365.vn/blog/lich-su-hinh-thanh-samsung-new13516.html" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 timviec365.vn</a></li>
+              <li><strong>General Electric (Mỹ):</strong><br />hàng không · y tế · năng lượng · tài chính<br /><a href="https://www.ge.com/about-us" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 ge.com/about-us</a></li>
+              <li><strong>Siemens (Đức):</strong><br />điện tử · giao thông · y tế · năng lượng<br /><a href="https://www.siemens.com/global/en/company/about.html" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 siemens.com/about</a></li>
             </ul>
           </div>
           <div>
@@ -867,9 +984,9 @@ function TichTuSection() {
           <div>
             <p className="slide-col-head">📌 Ví dụ cụ thể</p>
             <ul className="slide-bullets">
-              <li><strong>Berkshire Hathaway (Mỹ — Warren Buffett):</strong><br />bảo hiểm · đường sắt · năng lượng · bán lẻ · công nghệ</li>
-              <li><strong>Tata Group (Ấn Độ):</strong><br />ô tô · thép · IT · khách sạn · trà</li>
-              <li><strong>Alibaba (Trung Quốc):</strong><br />thương mại điện tử · cloud · thanh toán · truyền thông</li>
+              <li><strong>Berkshire Hathaway (Mỹ — Warren Buffett):</strong><br />bảo hiểm · đường sắt · năng lượng · bán lẻ · công nghệ<br /><a href="https://vi.wikipedia.org/wiki/Berkshire_Hathaway" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 vi.wikipedia.org</a></li>
+              <li><strong>Tata Group (Ấn Độ):</strong><br />ô tô · thép · IT · khách sạn · trà<br /><a href="https://www.tata.com/business" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 tata.com/business</a></li>
+              <li><strong>Alibaba (Trung Quốc):</strong><br />thương mại điện tử · cloud · thanh toán · truyền thông<br /><a href="https://www.alibabagroup.com/en-US/about-alibaba-businesses" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 alibabagroup.com</a></li>
             </ul>
           </div>
           <div>
@@ -904,9 +1021,12 @@ function TichTuSection() {
           <div>
             <p className="slide-col-head">📌 Ví dụ cụ thể</p>
             <ul className="slide-bullets">
-              <li><strong>Toyota:</strong> hợp tác với hơn 10.000 nhà cung cấp linh kiện toàn cầu</li>
-              <li><strong>Apple:</strong> thiết kế tại Mỹ — linh kiện từ hàng trăm công ty khác nhau</li>
-              <li><strong>Zara:</strong> làm việc với 1.400 xưởng may nhỏ ở Tây Ban Nha</li>
+              <li><strong>Toyota:</strong> hợp tác với hơn 10.000 nhà cung cấp linh kiện toàn cầu&nbsp;
+                <a href="https://vi.wikipedia.org/wiki/Toyota" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 vi.wikipedia.org</a></li>
+              <li><strong>Apple:</strong> thiết kế tại Mỹ — linh kiện từ hàng trăm công ty khác nhau&nbsp;
+                <a href="https://www.apple.com/supply-chain/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 apple.com/supply-chain</a></li>
+              <li><strong>Zara:</strong> làm việc với 1.400 xưởng may nhỏ ở Tây Ban Nha&nbsp;
+                <a href="https://en.wikipedia.org/wiki/Zara_(retailer)" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
             </ul>
           </div>
         </div>
@@ -925,10 +1045,10 @@ function TichTuSection() {
           <div>
             <p className="slide-col-head">📌 Ví dụ cụ thể</p>
             <ul className="slide-bullets">
-              <li><strong>Vingroup (Việt Nam):</strong> bất động sản · VinFast · bán lẻ · công nghệ</li>
-              <li><strong>Reliance Industries (Ấn Độ):</strong> dầu khí · viễn thông · bán lẻ</li>
-              <li><strong>Petrobras (Brazil):</strong> chi phối toàn bộ ngành dầu khí</li>
-              <li><strong>Saudi Aramco (Ả Rập):</strong> độc quyền dầu mỏ quy mô toàn cầu</li>
+              <li><strong>Vingroup (Việt Nam):</strong> bất động sản · VinFast · bán lẻ · công nghệ<br /><a href="https://en.wikipedia.org/wiki/Vingroup" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
+              <li><strong>Reliance Industries (Ấn Độ):</strong> dầu khí · viễn thông · bán lẻ<br /><a href="https://en.wikipedia.org/wiki/Reliance_Industries" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
+              <li><strong>Petrobras (Brazil):</strong> chi phối toàn bộ ngành dầu khí<br /><a href="https://en.wikipedia.org/wiki/Petrobras" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
+              <li><strong>Saudi Aramco (Ả Rập):</strong> độc quyền dầu mỏ quy mô toàn cầu<br /><a href="https://en.wikipedia.org/wiki/Saudi_Aramco" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
             </ul>
           </div>
           <div>
@@ -975,11 +1095,11 @@ function TichTuSection() {
       <ImageGallery
         title="🏭 Các tập đoàn tiêu biểu"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Samsung_Logo.svg/320px-Samsung_Logo.svg.png', label: 'Samsung', emoji: '📱' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Berkshire_Hathaway.svg/320px-Berkshire_Hathaway.svg.png', label: 'Berkshire Hathaway', emoji: '💰' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Toyota.svg/320px-Toyota.svg.png', label: 'Toyota Group', emoji: '🚗' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/320px-Coca-Cola_logo.svg.png', label: 'Coca-Cola', emoji: '🥤' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Exor_logo.svg/320px-Exor_logo.svg.png', label: 'EXOR (Agnelli)', emoji: '🏎️' },
+          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/1200px-Samsung_Logo.svg.png', label: 'Samsung', emoji: '📱', bg: '#1428A0' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://berkshirehathaway.com&size=256', label: 'Berkshire Hathaway', emoji: '💰', bg: '#1a3a5c' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://toyota.com&size=256', label: 'Toyota Group', emoji: '🚗', bg: '#EB0A1E' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://coca-cola.com&size=256', label: 'Coca-Cola', emoji: '🥤', bg: '#E3001B' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://siemens.com&size=256', label: 'Siemens', emoji: '⚡', bg: '#009999' },
         ]}
       />
     </div>
@@ -1009,9 +1129,7 @@ function TaiChinhSection() {
           <span style={{ background: 'none', border: 'none', color: 'var(--text)' }}>➡️</span>
           <span>💰 Tập đoàn tài chính lớn</span>
         </div>
-        <div className="speaker-note">
-          🎤 <strong>Nói:</strong> Thưa thầy/cô và các bạn, hôm nay nhóm em trình bày về biểu hiện vai trò của tư bản tài chính – một đặc trưng nổi bật của chủ nghĩa tư bản độc quyền. Tư bản tài chính hình thành khi tư bản ngân hàng và tư bản công nghiệp hợp nhất lại với nhau.
-        </div>
+
       </div>
 
       {/* Slide 2: Biểu hiện 1 */}
@@ -1038,16 +1156,15 @@ function TaiChinhSection() {
               <li>
                 <strong>JPMorgan Chase (Mỹ):</strong>
                 <br /><span style={{ color: 'rgba(220,230,240,.65)', fontSize: '.8rem' }}>ngân hàng đầu tư · quản lý tài sản · ngân hàng thương mại · thẻ tín dụng · quỹ đầu tư</span>
+                <br /><a href="https://en.wikipedia.org/wiki/JPMorgan_Chase" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a>
               </li>
               <li style={{ marginTop: '.5rem' }}>
                 <strong>ICBC (Trung Quốc):</strong>
                 <br /><span style={{ color: 'rgba(220,230,240,.65)', fontSize: '.8rem' }}>ngân hàng lớn nhất thế giới · công nghiệp · bất động sản · bảo hiểm</span>
+                <br /><a href="https://en.wikipedia.org/wiki/Industrial_and_Commercial_Bank_of_China" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a>
               </li>
             </ul>
           </div>
-        </div>
-        <div className="speaker-note">
-          🎤 <strong>Nói:</strong> Biểu hiện đầu tiên là các tập đoàn tài chính ngày nay không còn chỉ hoạt động trong lĩnh vực ngân hàng mà mở rộng sang rất nhiều ngành. JPMorgan Chase vừa là ngân hàng đầu tư, vừa quản lý tài sản, vừa cung cấp thẻ tín dụng và quỹ đầu tư.
         </div>
       </div>
 
@@ -1090,9 +1207,6 @@ function TaiChinhSection() {
             </ul>
           </div>
         </div>
-        <div className="speaker-note">
-          🎤 <strong>Nói:</strong> Cơ chế tham dự là cách tập đoàn tài chính kiểm soát doanh nghiệp qua cổ phiếu. Chỉ cần nắm 30% cổ phần – trong khi hàng triệu cổ đông nhỏ không tham gia quản lý – một nhóm nhỏ đã có thể điều hành toàn bộ công ty.
-        </div>
       </div>
 
       {/* Slide 4: Biểu hiện 3 */}
@@ -1102,9 +1216,9 @@ function TaiChinhSection() {
           <div>
             <p className="slide-col-head">Ví dụ ngân hàng toàn cầu</p>
             <ul className="slide-bullets">
-              <li><strong>HSBC (Anh):</strong> 64 quốc gia · 40 triệu khách hàng · tài sản $3 nghìn tỷ</li>
-              <li><strong>Citigroup (Mỹ):</strong> 160 quốc gia · 200 triệu tài khoản</li>
-              <li><strong>BNP Paribas (Pháp):</strong> ngân hàng lớn nhất châu Âu · 72 quốc gia</li>
+              <li><strong>HSBC (Anh):</strong> 64 quốc gia · 40 triệu khách hàng · tài sản $3 nghìn tỷ&nbsp;<a href="https://en.wikipedia.org/wiki/HSBC" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
+              <li><strong>Citigroup (Mỹ):</strong> 160 quốc gia · 200 triệu tài khoản&nbsp;<a href="https://en.wikipedia.org/wiki/Citigroup" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
+              <li><strong>BNP Paribas (Pháp):</strong> ngân hàng lớn nhất châu Âu · 72 quốc gia&nbsp;<a href="https://en.wikipedia.org/wiki/BNP_Paribas" target="_blank" rel="noopener noreferrer" style={{ fontSize: '.78rem', color: 'var(--sky)', opacity: .8 }}>🔗 en.wikipedia.org</a></li>
             </ul>
           </div>
           <div>
@@ -1124,9 +1238,6 @@ function TaiChinhSection() {
               <li>Các sản phẩm tài chính phức tạp</li>
             </ul>
           </div>
-        </div>
-        <div className="speaker-note">
-          🎤 <strong>Nói:</strong> Biểu hiện thứ ba là các ngân hàng lớn đã vươn ra toàn cầu. HSBC có mặt tại 64 quốc gia, Citigroup tại 160 quốc gia. Các hoạt động tài chính lớn thường tập trung ở những trung tâm tài chính như New York, London, Hong Kong và Singapore.
         </div>
       </div>
 
@@ -1152,19 +1263,16 @@ function TaiChinhSection() {
             <div className="org-box org-chain">🌐 Hoạt động toàn cầu</div>
           </div>
         </div>
-        <div className="speaker-note">
-          🎤 <strong>Câu kết:</strong> Tóm lại, tư bản tài chính ngày càng đóng vai trò quan trọng trong nền kinh tế. Các tập đoàn tài chính không chỉ kiểm soát ngân hàng mà còn liên kết với nhiều ngành kinh tế khác và mở rộng hoạt động trên phạm vi toàn cầu.
-        </div>
       </div>
 
       <ImageGallery
         title="🏦 Các tập đoàn Tài chính lớn nhất thế giới"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/BlackRock_wordmark.svg/320px-BlackRock_wordmark.svg.png', label: 'BlackRock ($10T AUM)', emoji: '🏛️' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Logo_JPMorgan_Chase.svg/320px-Logo_JPMorgan_Chase.svg.png', label: 'JPMorgan Chase', emoji: '🏦' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Goldman_Sachs.svg/320px-Goldman_Sachs.svg.png', label: 'Goldman Sachs', emoji: '📊' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Bank_of_America_logo.svg/320px-Bank_of_America_logo.svg.png', label: 'Bank of America', emoji: '💵' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Vanguard_Logo.svg/320px-Vanguard_Logo.svg.png', label: 'Vanguard Group', emoji: '⛵' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://blackrock.com&size=256', label: 'BlackRock ($10T AUM)', emoji: '🏛️', bg: '#1a1a2e' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://jpmorgan.com&size=256', label: 'JPMorgan Chase', emoji: '🏦', bg: '#003087' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://goldmansachs.com&size=256', label: 'Goldman Sachs', emoji: '📊', bg: '#5a6c8c' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://bankofamerica.com&size=256', label: 'Bank of America', emoji: '💵', bg: '#E31837' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://investor.vanguard.com&size=256', label: 'Vanguard Group', emoji: '⛵', bg: '#811f10' },
         ]}
       />
     </div>
@@ -1180,11 +1288,11 @@ function XuatKhauSection() {
       <ImageGallery
         title="🌟 Ví dụ: FDI & Xuất khẩu Tư bản hiện đại"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/320px-Amazon_logo.svg.png', label: 'Amazon AWS (FDI Cloud)', emoji: '☁️' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Berkshire_Hathaway.svg/320px-Berkshire_Hathaway.svg.png', label: 'Berkshire Hathaway', emoji: '💰' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Toyota_Motor_Corporation_Logo.png/240px-Toyota_Motor_Corporation_Logo.png', label: 'Toyota FDI VN', emoji: '🇻🇳' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/160px-Apple_logo_black.svg.png', label: 'Apple Supply Chain', emoji: '🌏' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Temasek_Logo.svg/280px-Temasek_Logo.svg.png', label: 'Temasek Holdings', emoji: '🇸🇬' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://aws.amazon.com&size=256', label: 'Amazon AWS (FDI Cloud)', emoji: '☁️', bg: '#FF9900' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://berkshirehathaway.com&size=256', label: 'Berkshire Hathaway', emoji: '💰', bg: '#1a3a5c' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://toyota.com&size=256', label: 'Toyota FDI VN', emoji: '🇻🇳', bg: '#EB0A1E' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://apple.com&size=256', label: 'Apple Supply Chain', emoji: '🌏', bg: '#555555' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://temasek.com.sg&size=256', label: 'Temasek Holdings', emoji: '🇸🇬', bg: '#e30613' },
         ]}
       />
 
@@ -1389,13 +1497,13 @@ function ThiTruongSection() {
       <h2>🗺️ Phân chia Thị trường Thế giới</h2>
 
       <ImageGallery
-        title="🤝 Liên minh kinh tế & Tổ chức quyn monopoly"
+        title="🤝 Liên minh kinh tế & Tổ chức độc quyền"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/320px-Flag_of_Europe.svg.png', label: 'Liên minh Châu Âu (EU)', emoji: '🇪🇺' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/OPEC_logo.svg/240px-OPEC_logo.svg.png', label: 'OPEC - Dầu mỏ', emoji: '🛢️' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/WTO_logo.svg/240px-WTO_logo.svg.png', label: 'WTO', emoji: '🌐' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/ASEAN_emblem.svg/240px-ASEAN_emblem.svg.png', label: 'ASEAN', emoji: '🇸🇪' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/320px-Coca-Cola_logo.svg.png', label: 'Coca-Cola Phân chia', emoji: '🥤' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://europa.eu&size=256', label: 'Liên minh Châu Âu (EU)', emoji: '🇪🇺', bg: '#003399' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://opec.org&size=256', label: 'OPEC - Dầu mỏ', emoji: '🛢️', bg: '#007A5E' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://wto.org&size=256', label: 'WTO', emoji: '🌐', bg: '#1a356e' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://asean.org&size=256', label: 'ASEAN', emoji: '🌏', bg: '#033e8c' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://coca-cola.com&size=256', label: 'Coca-Cola Toàn cầu', emoji: '🥤', bg: '#E3001B' },
         ]}
       />
 
@@ -1598,11 +1706,11 @@ function LanhThoSection() {
       <ImageGallery
         title="🇺🇸 Các tổ chức địa chính trị & quân sự"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/NATO_OTAN_landscape_logo.svg/320px-NATO_OTAN_landscape_logo.svg.png', label: 'NATO', emoji: '🛡️' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Flag_of_the_United_Nations.svg/320px-Flag_of_the_United_Nations.svg.png', label: 'Liên Hợp Quốc', emoji: '🌍' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/320px-Flag_of_the_United_States.svg.png', label: 'Mỹ - Siêu cường số 1', emoji: '🇺🇸' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', label: 'Nga', emoji: '🇷🇺' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/320px-Flag_of_the_People%27s_Republic_of_China.svg.png', label: 'Trung Quốc', emoji: '🇨🇳' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://nato.int&size=256', label: 'NATO', emoji: '🛡️', bg: '#003087' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://un.org&size=256', label: 'Liên Hợp Quốc', emoji: '🌍', bg: '#4b92db' },
+          { src: 'https://flagcdn.com/w160/us.png', label: 'Mỹ - Siêu cường số 1', emoji: '🇺🇸', bg: '#3c3b6e' },
+          { src: 'https://flagcdn.com/w160/ru.png', label: 'Nga', emoji: '🇷🇺', bg: '#003580' },
+          { src: 'https://flagcdn.com/w160/cn.png', label: 'Trung Quốc', emoji: '🇨🇳', bg: '#DE2910' },
         ]}
       />
 
@@ -1961,11 +2069,11 @@ function NhanSuSection() {
       <ImageGallery
         title="🔄 Ví dụ Revolving Door - Cửa quay nhân sự"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Logo_JPMorgan_Chase.svg/320px-Logo_JPMorgan_Chase.svg.png', label: 'JPMorgan ↔ FED', emoji: '🏦' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Goldman_Sachs.svg/320px-Goldman_Sachs.svg.png', label: 'Goldman Sachs ↔ Nhà nước', emoji: '🏦' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/320px-Microsoft_logo.svg.png', label: 'Microsoft ↔ Sáng kiến công', emoji: '💻' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Federal_Reserve_logo.svg/240px-Federal_Reserve_logo.svg.png', label: 'Cục Dự trữ Liên bang', emoji: '🧱' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/BlackRock_wordmark.svg/320px-BlackRock_wordmark.svg.png', label: 'BlackRock ↔ Chính phủ', emoji: '🏛️' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://jpmorgan.com&size=256', label: 'JPMorgan ↔ FED', emoji: '🏦', bg: '#003087' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://goldmansachs.com&size=256', label: 'Goldman Sachs ↔ Nhà nước', emoji: '🏦', bg: '#5a6c8c' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://microsoft.com&size=256', label: 'Microsoft ↔ Sáng kiến công', emoji: '💻', bg: '#00BCF2' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://federalreserve.gov&size=256', label: 'Cục Dự trữ Liên bang', emoji: '🧱', bg: '#1B395E' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://blackrock.com&size=256', label: 'BlackRock ↔ Chính phủ', emoji: '🏛️', bg: '#1a1a2e' },
         ]}
       />
 
@@ -2124,11 +2232,11 @@ function SoHuuNNSection() {
       <ImageGallery
         title="🏦 Các tổ chức Nhà nước nắm giữ kinh tế"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Temasek_Logo.svg/280px-Temasek_Logo.svg.png', label: 'Temasek (Singapore)', emoji: '🇸🇬' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Federal_Reserve_logo.svg/240px-Federal_Reserve_logo.svg.png', label: 'FED (Mỹ)', emoji: '🇺🇸' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/IMF_logo.svg/240px-IMF_logo.svg.png', label: 'IMF', emoji: '🌐' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/WorldBankGroup.svg/320px-WorldBankGroup.svg.png', label: 'World Bank', emoji: '🏦' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/320px-Flag_of_Europe.svg.png', label: 'ECB (Châu Âu)', emoji: '🇪🇺' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://temasek.com.sg&size=256', label: 'Temasek (Singapore)', emoji: '🇸🇬', bg: '#e30613' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://federalreserve.gov&size=256', label: 'FED (Mỹ)', emoji: '🇺🇸', bg: '#1B395E' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://imf.org&size=256', label: 'IMF', emoji: '🌐', bg: '#1a3660' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://worldbank.org&size=256', label: 'World Bank', emoji: '🏦', bg: '#009FDA' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://ecb.europa.eu&size=256', label: 'ECB (Châu Âu)', emoji: '🇪🇺', bg: '#003299' },
         ]}
       />
 
@@ -2385,11 +2493,11 @@ function DieuTietSection() {
       <ImageGallery
         title="🌐 Các tổ chức Điều tiết Kinh tế Toàn cầu"
         items={[
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/IMF_logo.svg/240px-IMF_logo.svg.png', label: 'IMF - Tiền tệ Quốc tế', emoji: '🌐' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/WorldBankGroup.svg/320px-WorldBankGroup.svg.png', label: 'World Bank', emoji: '🏦' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/WTO_logo.svg/240px-WTO_logo.svg.png', label: 'WTO', emoji: '🛢️' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Federal_Reserve_logo.svg/240px-Federal_Reserve_logo.svg.png', label: 'FED', emoji: '🇺🇸' },
-          { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/320px-Flag_of_Europe.svg.png', label: 'ECB', emoji: '🇪🇺' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://imf.org&size=256', label: 'IMF - Tiền tệ Quốc tế', emoji: '🌐', bg: '#1a3660' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://worldbank.org&size=256', label: 'World Bank', emoji: '🏦', bg: '#009FDA' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://wto.org&size=256', label: 'WTO', emoji: '🛢️', bg: '#1a356e' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://federalreserve.gov&size=256', label: 'FED', emoji: '🇺🇸', bg: '#1B395E' },
+          { src: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://ecb.europa.eu&size=256', label: 'ECB', emoji: '🇪🇺', bg: '#003299' },
         ]}
       />
 

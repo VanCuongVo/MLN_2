@@ -1890,19 +1890,34 @@ ul li::before {
 .gallery-img-wrap {
   width: 110px;
   height: 80px;
-  background: white;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: .5rem;
   overflow: hidden;
+  transition: background .2s;
 }
 
 .gallery-img-wrap img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+.gallery-brand-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.gallery-brand-emoji {
+  font-size: 2.6rem;
+  line-height: 1;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .3));
 }
 
 
@@ -2984,8 +2999,8 @@ ul li::before {
   align-items: center;
   gap: .9rem;
   padding: 1rem 1.2rem;
-  background: white;
-  border: 2px solid #e2e8f0;
+  background: var(--navy2);
+  border: 1.5px solid rgba(255, 255, 255, .1);
   border-radius: 16px;
   cursor: pointer;
   text-align: left;
@@ -2994,8 +3009,8 @@ ul li::before {
 
 .tool-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .1);
-  border-color: currentColor;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+  border-color: rgba(255, 255, 255, .25);
 }
 
 .tool-card-icon {
@@ -3013,11 +3028,12 @@ ul li::before {
   font-size: .95rem;
   font-weight: 700;
   line-height: 1.2;
+  color: var(--text);
 }
 
 .tool-card-sub {
   font-size: .75rem;
-  color: #94a3b8;
+  color: rgba(220, 230, 240, .5);
   margin-top: .15rem;
 }
 
