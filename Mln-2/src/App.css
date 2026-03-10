@@ -1942,6 +1942,258 @@ ul li::before {
   font-style: italic;
 }
 
+/* Footer Info Button */
+.footer-info-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  margin-top: 1.2rem;
+  padding: .55rem 1.4rem;
+  border-radius: 30px;
+  border: 1.5px solid rgba(66, 165, 245, .35);
+  background: rgba(21, 101, 192, .15);
+  color: var(--sky);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, transform .15s, box-shadow .2s;
+  letter-spacing: .02em;
+}
+
+.footer-info-btn:hover {
+  background: rgba(21, 101, 192, .3);
+  border-color: var(--sky);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(66, 165, 245, .25);
+}
+
+.footer-info-btn-icon {
+  font-size: 1.05rem;
+  font-weight: 900;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--sky);
+  color: var(--navy);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Info Panel Overlay */
+.ipanel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(10, 18, 30, .65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn .2s ease;
+}
+
+/* Info Panel */
+.ipanel {
+  background: #fff;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .35);
+  overflow: hidden;
+  animation: fadeInUp .25s ease;
+}
+
+/* Panel Header */
+.ipanel-header {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  padding: 1.15rem 1.4rem;
+  background: linear-gradient(135deg, #6d28d9 0%, #be185d 100%);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.ipanel-header-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.ipanel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.ipanel-subtitle {
+  font-size: .75rem;
+  opacity: .75;
+  margin-top: .1rem;
+}
+
+.ipanel-close {
+  margin-left: auto;
+  background: rgba(255, 255, 255, .18);
+  border: none;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: .95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .18s;
+}
+
+.ipanel-close:hover {
+  background: rgba(255, 255, 255, .35);
+}
+
+/* Panel Body */
+.ipanel-body {
+  overflow-y: auto;
+  padding: 1.3rem 1.4rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.ipanel-section-label {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #64748b;
+  padding-bottom: .4rem;
+  border-bottom: 1.5px solid #e2e8f0;
+  margin-bottom: .1rem;
+}
+
+/* AI list */
+.ipanel-ai-list {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.ipanel-ai-item {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .6rem .9rem;
+  border-radius: 10px;
+  border: 1.5px solid;
+}
+
+.ipanel-ai-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.ipanel-ai-name {
+  font-size: .88rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ipanel-ai-desc {
+  font-size: .78rem;
+  color: #64748b;
+  margin-top: .1rem;
+  line-height: 1.3;
+}
+
+/* Prompts list */
+.ipanel-prompts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .38rem;
+  padding: 0;
+}
+
+.ipanel-prompts li {
+  font-size: .83rem;
+  color: #374151;
+  padding: .45rem .75rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border-left: 3px solid #a78bfa;
+  line-height: 1.45;
+}
+
+/* Concepts grid */
+.ipanel-concepts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .45rem;
+}
+
+.ipanel-concept-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .82rem;
+  padding: .45rem .7rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.ipanel-concept-item.ok {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.ipanel-concept-item.pending {
+  background: #fafafa;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+}
+
+.ipanel-concept-check {
+  font-size: .9rem;
+  flex-shrink: 0;
+}
+
+/* Goals */
+.ipanel-goals {
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.ipanel-goals li {
+  font-size: .83rem;
+  color: #374151;
+  line-height: 1.45;
+  padding: .35rem 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.ipanel-goals li:last-child {
+  border-bottom: none;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -4251,5 +4503,95 @@ ul li::before {
 
   .ss-dots {
     display: none;
+  }
+}
+
+/* ============================================
+   Lightning Click Effect
+   ============================================ */
+.lightning-click {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  width: 0;
+  height: 0;
+}
+
+.lightning-click .lc-flash {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, #fff 0%, #00e5ff 25%, #42a5f5 55%, transparent 75%);
+  box-shadow: 0 0 18px #00e5ff, 0 0 36px #1565c0, 0 0 60px rgba(0, 188, 212, .4);
+  animation: lc-flash .55s ease-out forwards;
+}
+
+.lightning-click .lc-ring {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(0, 229, 255, .8);
+  animation: lc-ring .55s ease-out forwards;
+}
+
+.lightning-click .lc-spark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: linear-gradient(to top, transparent, #00e5ff, #fff);
+  transform-origin: 1.5px 0px;
+  box-shadow: 0 0 6px #00e5ff;
+  animation: lc-spark .5s ease-out forwards;
+}
+
+@keyframes lc-flash {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+
+  35% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes lc-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: .9;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(2.8);
+    opacity: 0;
+  }
+}
+
+@keyframes lc-spark {
+  0% {
+    transform: rotate(var(--angle)) translateY(0px) scaleY(1);
+    opacity: 1;
+  }
+
+  60% {
+    opacity: .9;
+  }
+
+  100% {
+    transform: rotate(var(--angle)) translateY(-32px) scaleY(.2);
+    opacity: 0;
   }
 }

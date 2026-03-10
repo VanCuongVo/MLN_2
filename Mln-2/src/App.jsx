@@ -18,11 +18,42 @@ function App() {
   const [flashcardsOpen, setFlashcardsOpen] = useState(false)
   const [timerOpen, setTimerOpen] = useState(false)
   const [slideshowOpen, setSlideshowOpen] = useState(false)
+  const [infoOpen, setInfoOpen] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = activeModal ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [activeModal])
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      const container = document.createElement('div')
+      container.className = 'lightning-click'
+      container.style.left = e.clientX + 'px'
+      container.style.top = e.clientY + 'px'
+
+      const flash = document.createElement('div')
+      flash.className = 'lc-flash'
+      container.appendChild(flash)
+
+      const ring = document.createElement('div')
+      ring.className = 'lc-ring'
+      container.appendChild(ring)
+
+      const angles = [0, 45, 90, 135, 180, 225, 270, 315]
+      angles.forEach(angle => {
+        const spark = document.createElement('div')
+        spark.className = 'lc-spark'
+        spark.style.setProperty('--angle', `${angle}deg`)
+        container.appendChild(spark)
+      })
+
+      document.body.appendChild(container)
+      setTimeout(() => container.remove(), 600)
+    }
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [])
 
   const openModal = (id) => {
     setActiveModal(id)
@@ -215,7 +246,13 @@ function App() {
             </div>
           ))}
         </div>
+        <button className="footer-info-btn" onClick={() => setInfoOpen(true)}>
+          <span className="footer-info-btn-icon">ℹ</span>
+          Phân Tích Lý Thuyết &amp; Công Cụ Hỗ Trợ
+        </button>
       </footer>
+
+      {infoOpen && <InfoPanel onClose={() => setInfoOpen(false)} />}
 
       {/* AI Chat */}
       <AiChat />
@@ -3278,6 +3315,95 @@ function AiChat() {
         </div>
       )}
     </>
+  )
+}
+
+function InfoPanel({ onClose }) {
+  const AIs = [
+    { name: 'Claude 3.5 Sonnet', desc: 'Phân tích & soạn thảo nội dung lý luận Mác-Lênin về độc quyền tư bản', color: '#c98a5e', bg: 'rgba(201,138,94,.13)', border: 'rgba(201,138,94,.35)', icon: '◆' },
+    { name: 'GitHub Copilot', desc: 'Hỗ trợ gợi ý code, debug và hoàn thiện chi tiết giao diện React/Vite', color: '#58a6ff', bg: 'rgba(88,166,255,.13)', border: 'rgba(88,166,255,.35)', icon: '✿' },
+    { name: 'GPT-4o', desc: 'Nghiên cứu số liệu thực tế: FDI, OPEC, TNCs, thị phần toàn cầu', color: '#10a37f', bg: 'rgba(16,163,127,.13)', border: 'rgba(16,163,127,.35)', icon: '⬥' },
+  ]
+  const prompts = [
+    'Phân tích 5 biểu hiện mới của độc quyền trong chủ nghĩa tư bản thế kỷ XXI',
+    'Giải thích cơ chế tham dự trong tư bản tài chính và sức mạnh của oligarchy tàì chính',
+    'So sánh xuất khẩu tư bản với xuất khẩu hàng hóa — tác động đến nước nhận đầu tư',
+    'Phân tích vai trò của TNCs trong việc phân chia thị trường thế giới và cạnh tranh giữa các khối',
+    'Mô tả các hình thức chiến tranh mới (proxy war, chiến tranh thông tin) trong phân chia lãnh thổ',
+    'Phân tích bản chất giai cấp của nhà nước tư sản thông qua cơ chế quan hệ nhân sự',
+    'Giải thích vai trò điều tiết kinh tế vĩ mô của nhà nước độc quyền — ngân sách, giải cứu tập đoàn',
+    'Xây dựng hệ thống câu hỏi trắc nghiệm 10 câu về biểu hiện mới của độc quyền tư bản',
+  ]
+  const concepts = [
+    { label: '9 chủ đề nội dung chính', ok: true },
+    { label: 'Quiz 10 câu trắc nghiệm', ok: true },
+    { label: 'Biểu đồ dữ liệu (FDI, OPEC, thị phần)', ok: true },
+    { label: 'Timeline lịch sử 1860s → 2020s', ok: true },
+    { label: 'Flashcard 10 thuật ngữ', ok: true },
+    { label: 'Slideshow trình chiếu', ok: true },
+    { label: 'Đồng hồ đếm ngược', ok: true },
+    { label: 'AI Chat hỗ trợ học tập', ok: true },
+    { label: 'Export PDF / In tài liệu', ok: true },
+    { label: 'Framer Motion animations', ok: false },
+  ]
+  const goals = [
+    'Hiểu và phân tích được 5 biểu hiện mới của chủ nghĩa tư bản độc quyền',
+    'Nắm vững khái niệm tư bản tài chính, cơ chế tham dự và tầng lớp tài phiệt',
+    'Phân biệt xuất khẩu tư bản theo hình thức (FDI, ODA, đầu tư gián tiếp)',
+    'Nhận diện vai trò TNCs và các liên minh kinh tế trong phân chia thị trường',
+    'Phân tích bản chất và chức năng của nhà nước độc quyền tư bản hiện đại',
+    'Áp dụng lý thuyết vào phân tích các sự kiện kinh tế - chính trị thực tế',
+  ]
+
+  return (
+    <div className="ipanel-overlay" onClick={onClose}>
+      <div className="ipanel" onClick={e => e.stopPropagation()}>
+        <div className="ipanel-header">
+          <span className="ipanel-header-icon">ℹ</span>
+          <div>
+            <div className="ipanel-title">Phân Tích Lý Thuyết &amp; Công Cụ Hỗ Trợ</div>
+            <div className="ipanel-subtitle">Dữ liệu về AI, Prompts, Bài thuyết trình, Nội dung</div>
+          </div>
+          <button className="ipanel-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="ipanel-body">
+
+          <div className="ipanel-section-label">✦ AI Models Được Sử Dụng</div>
+          <div className="ipanel-ai-list">
+            {AIs.map(ai => (
+              <div key={ai.name} className="ipanel-ai-item" style={{ background: ai.bg, borderColor: ai.border }}>
+                <span className="ipanel-ai-icon" style={{ color: ai.color }}>{ai.icon}</span>
+                <div>
+                  <div className="ipanel-ai-name" style={{ color: ai.color }}>{ai.name}</div>
+                  <div className="ipanel-ai-desc">{ai.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="ipanel-section-label">✦ Prompts Và Lý Thuyết</div>
+          <ul className="ipanel-prompts">
+            {prompts.map((p, i) => <li key={i}>{p}</li>)}
+          </ul>
+
+          <div className="ipanel-section-label">✦ Các Khái Niệm Chính Được Triển Khai</div>
+          <div className="ipanel-concepts-grid">
+            {concepts.map((c, i) => (
+              <div key={i} className={`ipanel-concept-item ${c.ok ? 'ok' : 'pending'}`}>
+                <span className="ipanel-concept-check">{c.ok ? '✓' : '○'}</span>
+                {c.label}
+              </div>
+            ))}
+          </div>
+
+          <div className="ipanel-section-label">✦ Mục Tiêu Học Tập</div>
+          <ol className="ipanel-goals">
+            {goals.map((g, i) => <li key={i}>{g}</li>)}
+          </ol>
+
+        </div>
+      </div>
+    </div>
   )
 }
 
