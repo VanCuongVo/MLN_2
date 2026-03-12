@@ -928,33 +928,19 @@ function TichTuSection() {
       {/* Slide 1 – Tổng quan */}
       <div className="card highlight">
         <h3>📌 Bức tranh toàn cảnh</h3>
-        <div className="tt-compare">
-          <div className="tt-compare-col tt-before">
-            <div className="tt-compare-label">Trước đây</div>
-            <ul className="slide-bullets">
-              <li>Hoạt động trong <strong>1 ngành</strong></li>
-              <li>Bó hẹp trong <strong>1 quốc gia</strong></li>
-              <li>Quy mô nhỏ, ít liên kết</li>
-            </ul>
-          </div>
-          <div className="tt-compare-arrow">→</div>
-          <div className="tt-compare-col tt-after">
-            <div className="tt-compare-label">Ngày nay</div>
-            <ul className="slide-bullets">
-              <li>Mở rộng <strong>nhiều ngành</strong></li>
-              <li>Hoạt động <strong>xuyên quốc gia</strong></li>
-              <li>Concern · Conglomerate · TNCs</li>
-            </ul>
-          </div>
-        </div>
-        <div className="slide-examples" style={{ marginTop: '.8rem' }}>
+
+        <p style={{ fontSize: '.95rem', lineHeight: '1.7', marginBottom: '.9rem' }}>
+          Trong giai đoạn hiện nay, tích tụ và tập trung tư bản có những <strong>biểu hiện mới</strong>. Trước đây, các doanh nghiệp chủ yếu phát triển trong <em>một ngành</em> và <em>một quốc gia</em>. Nhưng ngày nay, do sự phát triển của khoa học công nghệ và toàn cầu hóa, nhiều tập đoàn lớn đã mở rộng hoạt động ra <strong>nhiều ngành và nhiều quốc gia</strong>.
+        </p>
+        <p style={{ fontSize: '.95rem', lineHeight: '1.7', marginBottom: '.9rem' }}>
+          Từ đó xuất hiện các hình thức tổ chức độc quyền mới, tiêu biểu là <strong>Concern</strong> (tập đoàn đa ngành) và <strong>Conglomerate</strong> (tập đoàn hỗn hợp). Bên cạnh đó, doanh nghiệp vừa và nhỏ vẫn tồn tại nhưng thường <em>liên kết hoặc phụ thuộc</em> vào các tập đoàn lớn trong chuỗi sản xuất.
+        </p>
+
+        <div className="slide-examples" style={{ marginTop: '.6rem' }}>
           <span>🏢 Concern</span>
           <span>💼 Conglomerate</span>
           <span>🏪 DN vừa & nhỏ</span>
           <span>🌏 Nước đang phát triển</span>
-        </div>
-        <div className="speaker-note">
-          💬 <em>Tích tụ và tập trung tư bản ngày nay thể hiện qua các tập đoàn xuyên quốc gia hoạt động ở nhiều ngành và nhiều quốc gia.</em>
         </div>
       </div>
 
@@ -3538,7 +3524,7 @@ function AiChat() {
             ))}
             {loading && (
               <div className="ai-msg ai-msg-ai">
-                <div className="ai-msg-avatar"><img src="" alt="AI" /></div>
+                <div className="ai-msg-avatar"><img src="/xoanen.png" alt="AI" /></div>
                 <div className="ai-msg-bubble ai-typing-bubble">
                   <span className="ai-typing-dot" /><span className="ai-typing-dot" /><span className="ai-typing-dot" />
                 </div>
@@ -3600,17 +3586,8 @@ function InfoPanel({ onClose }) {
     { label: 'Slideshow trình chiếu', ok: true },
     { label: 'Đồng hồ đếm ngược', ok: true },
     { label: 'AI Chat hỗ trợ học tập', ok: true },
-    { label: 'Export PDF / In tài liệu', ok: true },
-    { label: 'Framer Motion animations', ok: false },
   ]
-  const goals = [
-    'Hiểu và phân tích được 5 biểu hiện mới của chủ nghĩa tư bản độc quyền',
-    'Nắm vững khái niệm tư bản tài chính, cơ chế tham dự và tầng lớp tài phiệt',
-    'Phân biệt xuất khẩu tư bản theo hình thức (FDI, ODA, đầu tư gián tiếp)',
-    'Nhận diện vai trò TNCs và các liên minh kinh tế trong phân chia thị trường',
-    'Phân tích bản chất và chức năng của nhà nước độc quyền tư bản hiện đại',
-    'Áp dụng lý thuyết vào phân tích các sự kiện kinh tế - chính trị thực tế',
-  ]
+
 
   return (
     <div className="ipanel-overlay" onClick={onClose}>
@@ -3653,10 +3630,7 @@ function InfoPanel({ onClose }) {
             ))}
           </div>
 
-          <div className="ipanel-section-label">✦ Mục Tiêu Học Tập</div>
-          <ol className="ipanel-goals">
-            {goals.map((g, i) => <li key={i}>{g}</li>)}
-          </ol>
+
 
         </div>
       </div>
