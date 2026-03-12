@@ -227,7 +227,7 @@ function App() {
       {/* Footer */}
       <footer className="footer">
         <p className="footer-copy">© 2026 · Tài liệu học tập Kinh tế chính trị Mác - Lênin</p>
-        <div className="footer-ai-label"><img src="https://ava-grp-talk.zadn.vn/9/9/a/2/2/360/8d84b3493ccd55c45d27228da2ae5d7c.jpg" alt="AI" style={{ width: '1.2rem', height: '1.2rem', objectFit: 'cover', borderRadius: '50%', verticalAlign: 'middle', marginRight: '.35rem' }} />Hỗ trợ bởi AI</div>
+        <div className="footer-ai-label"><img src="/xoanen.png" alt="AI" style={{ width: '1.2rem', height: '1.2rem', objectFit: 'cover', borderRadius: '50%', verticalAlign: 'middle', marginRight: '.35rem' }} />Hỗ trợ bởi AI</div>
         <div className="footer-ai-row">
           {[
             { icon: '✦', name: 'Gemini', role: 'Soạn nội dung & outline bài thuyết trình', color: '#4285F4', bg: 'rgba(66,133,244,.12)', border: 'rgba(66,133,244,.3)' },
@@ -848,13 +848,13 @@ function IntroSection() {
         <h3>3️⃣ Minh chứng thực tế — Big Tech độc quyền</h3>
         <div className="bigtech-grid">
           {[
-            { logo: '🔍', name: 'Google', color: '#4285F4', bg: 'rgba(66,133,244,.12)', fields: 'Tìm kiếm · Quảng cáo · Cloud · AI · YouTube', stat: '~92% thị phần tìm kiếm toàn cầu' },
-            { logo: '📦', name: 'Amazon', color: '#FF9900', bg: 'rgba(255,153,0,.12)', fields: 'Thương mại điện tử · AWS · Logistics', stat: '~38% thị phần TMĐT tại Mỹ' },
-            { logo: '💻', name: 'Microsoft', color: '#00BCF2', bg: 'rgba(0,188,242,.12)', fields: 'Phần mềm · Azure · LinkedIn · OpenAI', stat: '~60% thị trường Cloud (cùng Google)' },
-            { logo: '🍎', name: 'Apple', color: '#aaa', bg: 'rgba(180,180,180,.12)', fields: 'Thiết bị · App Store · Dịch vụ tài chính', stat: '~85% lợi nhuận ngành smartphone' },
+            { logo: 'https://www.google.com/s2/favicons?domain=google.com&sz=128', name: 'Google', color: '#4285F4', bg: 'rgba(66,133,244,.12)', fields: 'Tìm kiếm · Quảng cáo · Cloud · AI · YouTube', stat: '~92% thị phần tìm kiếm toàn cầu' },
+            { logo: 'https://www.google.com/s2/favicons?domain=amazon.com&sz=128', name: 'Amazon', color: '#FF9900', bg: 'rgba(255,153,0,.12)', fields: 'Thương mại điện tử · AWS · Logistics', stat: '~38% thị phần TMĐT tại Mỹ' },
+            { logo: 'https://www.google.com/s2/favicons?domain=microsoft.com&sz=128', name: 'Microsoft', color: '#00BCF2', bg: 'rgba(0,188,242,.12)', fields: 'Phần mềm · Azure · LinkedIn · OpenAI', stat: '~60% thị trường Cloud (cùng Google)' },
+            { logo: 'https://www.google.com/s2/favicons?domain=apple.com&sz=128', name: 'Apple', color: '#aaa', bg: 'rgba(180,180,180,.12)', fields: 'Thiết bị · App Store · Dịch vụ tài chính', stat: '~85% lợi nhuận ngành smartphone' },
           ].map(t => (
             <div key={t.name} className="bigtech-card" style={{ borderColor: t.color, background: t.bg }}>
-              <div className="bigtech-logo" style={{ color: t.color }}>{t.logo}</div>
+              <div className="bigtech-logo"><img src={t.logo} alt={t.name} style={{ width: '2.2rem', height: '2.2rem', objectFit: 'contain', borderRadius: '8px' }} /></div>
               <div className="bigtech-name" style={{ color: t.color }}>{t.name}</div>
               <div className="bigtech-fields">{t.fields}</div>
               <div className="bigtech-stat">📊 {t.stat}</div>
@@ -1616,13 +1616,13 @@ function ThiTruongSection() {
         </p>
         <div className="bigtech-grid">
           {[
-            { logo: '🍎', name: 'Apple', color: '#aaa', bg: 'rgba(180,180,180,.1)', fields: 'Thiết bị · App Store · Dịch vụ', stat: 'Tiêu chuẩn hóa cả hệ sinh thái di động toàn cầu' },
-            { logo: '💻', name: 'Microsoft', color: '#00BCF2', bg: 'rgba(0,188,242,.1)', fields: 'Phần mềm · Azure · LinkedIn', stat: 'Kiểm soát 75% thị phần hệ điều hành PC' },
-            { logo: '🥤', name: 'Coca-Cola', color: '#E3001B', bg: 'rgba(227,0,27,.1)', fields: 'Nước giải khát · 200+ quốc gia', stat: '1,9 tỷ ly tiêu thụ mỗi ngày' },
-            { logo: '🟦', name: 'Pepsi', color: '#0047BB', bg: 'rgba(0,71,187,.1)', fields: 'Đồ uống · Snack · Thực phẩm', stat: 'Cùng Coca-Cola chiếm >70% thị phần toàn cầu' },
+            { logo: 'https://www.google.com/s2/favicons?domain=apple.com&sz=128', name: 'Apple', color: '#aaa', bg: 'rgba(180,180,180,.1)', fields: 'Thiết bị · App Store · Dịch vụ', stat: 'Tiêu chuẩn hóa cả hệ sinh thái di động toàn cầu' },
+            { logo: 'https://www.google.com/s2/favicons?domain=microsoft.com&sz=128', name: 'Microsoft', color: '#00BCF2', bg: 'rgba(0,188,242,.1)', fields: 'Phần mềm · Azure · LinkedIn', stat: 'Kiểm soát 75% thị phần hệ điều hành PC' },
+            { logo: 'https://www.google.com/s2/favicons?domain=coca-cola.com&sz=128', name: 'Coca-Cola', color: '#E3001B', bg: 'rgba(227,0,27,.1)', fields: 'Nước giải khát · 200+ quốc gia', stat: '1,9 tỷ ly tiêu thụ mỗi ngày' },
+            { logo: 'https://www.google.com/s2/favicons?domain=pepsi.com&sz=128', name: 'Pepsi', color: '#0047BB', bg: 'rgba(0,71,187,.1)', fields: 'Đồ uống · Snack · Thực phẩm', stat: 'Cùng Coca-Cola chiếm >70% thị phần toàn cầu' },
           ].map(t => (
             <div key={t.name} className="bigtech-card" style={{ borderColor: t.color, background: t.bg }}>
-              <div className="bigtech-logo" style={{ color: t.color }}>{t.logo}</div>
+              <div className="bigtech-logo"><img src={t.logo} alt={t.name} style={{ width: '2.2rem', height: '2.2rem', objectFit: 'contain', borderRadius: '8px' }} /></div>
               <div className="bigtech-name" style={{ color: t.color }}>{t.name}</div>
               <div className="bigtech-fields">{t.fields}</div>
               <div className="bigtech-stat">📊 {t.stat}</div>
@@ -3411,65 +3411,9 @@ function SlideshowMode({ sections, onClose }) {
 }
 
 // ===== AI CHAT DATA =====
-const AI_QA = [
-  {
-    keywords: ['tích tụ', 'tập trung', 'concern', 'conglomerate', 'consortium', 'cartel', 'trust'],
-    answer: '🏭 **Tích tụ & Tập trung tư bản** là biểu hiện đầu tiên của độc quyền mới. Các hình thức tổ chức gồm: **Concern** (tập đoàn đa ngành), **Conglomerate** (liên hợp đa dạng), **Consortium** (liên minh tài chính), **Cartel** và **Trust**. Ví dụ: Samsung, LG là các Concern điển hình của Hàn Quốc.',
-  },
-  {
-    keywords: ['tài chính', 'ngân hàng', 'đầu sỏ', 'tư bản tài chính', 'quả đấm thép'],
-    answer: '💰 **Tư bản tài chính** là sự dung hợp giữa tư bản ngân hàng độc quyền và tư bản công nghiệp độc quyền. Tạo ra tầng lớp **đầu sỏ tài chính** nắm quyền kiểm soát kinh tế. Ví dụ: JPMorgan Chase, Goldman Sachs kiểm soát hàng nghìn công ty qua sở hữu cổ phần.',
-  },
-  {
-    keywords: ['xuất khẩu tư bản', 'fdi', 'đầu tư nước ngoài', 'xuất khẩu'],
-    answer: '🌐 **Xuất khẩu tư bản** là đưa tư bản ra nước ngoài để thu lợi nhuận siêu ngạch. Gồm 2 hình thức: **Đầu tư trực tiếp (FDI)** – xây nhà máy, mua cổ phần kiểm soát; **Đầu tư gián tiếp (FPI)** – mua trái phiếu, cổ phiếu. Mục đích: khai thác tài nguyên và lao động rẻ.',
-  },
-  {
-    keywords: ['thị trường', 'phân chia thị trường', 'wto', 'opec'],
-    answer: '🗺️ **Phân chia thị trường thế giới**: Các tổ chức độc quyền quốc tế phân chia thị trường tiêu thụ và nguồn cung. Ví dụ: **OPEC** kiểm soát thị trường dầu mỏ; các Cartel trong ngành dược, chip bán dẫn phân chia thị phần toàn cầu.',
-  },
-  {
-    keywords: ['lãnh thổ', 'phân chia lãnh thổ', 'thuộc địa', 'ảnh hưởng'],
-    answer: '🌍 **Phân chia lãnh thổ ảnh hưởng**: Thay vì thuộc địa trực tiếp, nay dùng **"ngoại giao nợ"** (Belt & Road Initiative), căn cứ quân sự, hiệp định thương mại ưu đãi để kiểm soát các nước nhỏ. Đây là hình thức thuộc địa kiểu mới.',
-  },
-  {
-    keywords: ['độc quyền nhà nước', 'nhà nước tư sản', 'can thiệp nhà nước'],
-    answer: '🏛️ **Độc quyền Nhà nước** (State Monopoly Capitalism) là sự kết hợp giữa tư bản độc quyền tư nhân với bộ máy nhà nước, tạo cơ chế thống nhất phục vụ lợi ích tư bản độc quyền và duy trì chủ nghĩa tư bản trước các mâu thuẫn nội tại.',
-  },
-  {
-    keywords: ['nhân sự', 'quan hệ nhân sự', 'cửa quay', 'revolving door'],
-    answer: '👔 **Cơ chế "Cửa quay"** (Revolving Door): quan chức chính phủ sau khi nghỉ hưu vào làm tập đoàn lớn, và ngược lại CEO sang làm quan chức nhà nước. Ví dụ ở Mỹ: Bộ trưởng Tài chính từng là CEO Goldman Sachs; Bộ trưởng Quốc phòng từng lãnh đạo Raytheon.',
-  },
-  {
-    keywords: ['sở hữu nhà nước', 'quốc hữu hóa', 'doanh nghiệp nhà nước', 'tư nhân hóa'],
-    answer: '🏗️ **Sở hữu Nhà nước**: Nhà nước nắm giữ các doanh nghiệp chiến lược. Chu kỳ: **quốc hữu hóa** khi khủng hoảng (cứu vớt), rồi **tư nhân hóa** khi ổn định (chuyển lợi ích cho tư bản). Ví dụ: cứu trợ AIG, GM năm 2008-2009.',
-  },
-  {
-    keywords: ['điều tiết', 'công cụ điều tiết', 'chính sách', 'fed', 'lãi suất', 'ngân sách'],
-    answer: '⚙️ **Công cụ điều tiết vĩ mô**: **Chính sách tài khóa** (thu-chi ngân sách); **Chính sách tiền tệ** (FED tăng/giảm lãi suất); **Nới lỏng định lượng QE** (in tiền mua trái phiếu); **Trợ cấp** ngành chiến lược; **Mua sắm công** (hợp đồng quốc phòng).',
-  },
-  {
-    keywords: ['độc quyền là gì', 'khái niệm', 'định nghĩa', 'là gì'],
-    answer: '📚 **Độc quyền** là liên minh giữa các doanh nghiệp lớn nắm phần lớn sản xuất và tiêu thụ một loại hàng hóa, có khả năng định giá độc quyền để thu lợi nhuận cao. Theo Lenin, độc quyền xuất hiện khi tích tụ và tập trung tư bản đạt trình độ cao.',
-  },
-  {
-    keywords: ['ví dụ', 'thực tế', 'hiện nay', 'ngày nay', 'thế kỷ 21'],
-    answer: '🌟 **Ví dụ thực tế ngày nay**: Apple, Microsoft, Google, Amazon, Meta – 5 công ty chiếm hơn 25% vốn hóa S&P 500. TSMC độc quyền chip tiên tiến. NVIDIA kiểm soát >80% thị trường GPU AI. Đây là biểu hiện rõ nhất của tích tụ & tập trung tư bản thế kỷ XXI.',
-  },
-]
-
-function getAiAnswer(question) {
-  const q = question.toLowerCase()
-  for (const item of AI_QA) {
-    if (item.keywords.some(kw => q.includes(kw))) {
-      return item.answer
-    }
-  }
-  return '🤔 Tôi chưa có câu trả lời cho câu hỏi này. Hãy thử hỏi về: **tích tụ tư bản**, **tư bản tài chính**, **xuất khẩu tư bản**, **phân chia thị trường**, **phân chia lãnh thổ**, **độc quyền nhà nước**, **quan hệ nhân sự**, **sở hữu nhà nước**, hoặc **công cụ điều tiết**.'
-}
-
 // ===== AI CHAT COMPONENT =====
 let msgIdCounter = 0
+const CHAT_API_URL = 'https://3413-115-76-131-222.ngrok-free.app'
 
 function AiChat() {
   const [open, setOpen] = useState(false)
@@ -3477,20 +3421,65 @@ function AiChat() {
     { id: ++msgIdCounter, from: 'ai', text: '👋 Xin chào! Tôi là trợ lý AI của bài học.\nBạn có thể hỏi tôi về bất kỳ nội dung nào trong bài **Biểu hiện mới của Độc quyền**!' }
   ])
   const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const sessionIdRef = useRef(`session_${Date.now()}_${Math.random().toString(36).slice(2)}`)
+  const historyRef = useRef([])
 
-  const send = (question) => {
-    const trimmed = question.trim()
-    if (!trimmed) return
-    setMessages(prev => [
-      ...prev,
-      { id: ++msgIdCounter, from: 'user', text: trimmed },
-      { id: ++msgIdCounter, from: 'ai', text: getAiAnswer(trimmed) }
-    ])
-    setInput('')
+  const scrollToBottom = () => {
     setTimeout(() => {
       const el = document.getElementById('ai-chat-messages')
       if (el) el.scrollTop = el.scrollHeight
     }, 60)
+  }
+
+  const send = async (question) => {
+    const trimmed = question.trim()
+    if (!trimmed || loading) return
+    setInput('')
+
+    // Cập nhật history trước khi gửi
+    historyRef.current = [...historyRef.current, { role: 'user', content: trimmed }]
+
+    setMessages(prev => [...prev, { id: ++msgIdCounter, from: 'user', text: trimmed }])
+    setLoading(true)
+    scrollToBottom()
+    try {
+      const res = await fetch(`${CHAT_API_URL}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify({
+          message: trimmed,
+          conversation_history: historyRef.current.slice(0, -1), // lịch sử trước tin nhắn hiện tại
+          session_id: sessionIdRef.current
+        })
+      })
+      if (res.status === 429) throw new Error('API đang bận (rate limit). Vui lòng chờ vài giây rồi thử lại ⏳')
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      // Kiểm tra lỗi từ backend (vd: Gemini quota)
+      if (data.success === false) {
+        const errCode = data.error ?? ''
+        if (errCode === 'RATE_LIMIT_EXCEEDED') throw new Error('Gemini API hết quota hôm nay 😔 Vui lòng thử lại sau 00:00 UTC hoặc liên hệ quản trị viên đổi API key.')
+        throw new Error(data.message ?? errCode ?? 'Lỗi từ server')
+      }
+      const aiText = data?.data?.answer ?? data.response ?? data.answer ?? data.reply ?? data.message ?? JSON.stringify(data)
+      // Lưu phản hồi của AI vào history
+      historyRef.current = [...historyRef.current, { role: 'assistant', content: aiText }]
+      setMessages(prev => [...prev, { id: ++msgIdCounter, from: 'ai', text: aiText }])
+    } catch (err) {
+      // Xóa tin nhắn lỗi khỏi history
+      historyRef.current = historyRef.current.slice(0, -1)
+      setMessages(prev => [...prev, {
+        id: ++msgIdCounter, from: 'ai',
+        text: `⚠️ Không kết nối được API. Hãy đảm bảo backend đang chạy tại **${CHAT_API_URL}**.\n\nLỗi: ${err.message}`
+      }])
+    } finally {
+      setLoading(false)
+      scrollToBottom()
+    }
   }
 
   const quickQuestions = [
@@ -3512,7 +3501,7 @@ function AiChat() {
         )}
         <div className="ai-fab-char-bg">
           <img
-            src="https://ava-grp-talk.zadn.vn/9/9/a/2/2/360/8d84b3493ccd55c45d27228da2ae5d7c.jpg"
+            src="/xoanen.png"
             alt="AI"
             className="ai-fab-char-img"
           />
@@ -3524,7 +3513,7 @@ function AiChat() {
         <div className="ai-chat-window">
           <div className="ai-chat-header">
             <div className="ai-chat-header-left">
-              <div className="ai-chat-avatar"><img src="https://ava-grp-talk.zadn.vn/9/9/a/2/2/360/8d84b3493ccd55c45d27228da2ae5d7c.jpg" alt="AI" /></div>
+              <div className="ai-chat-avatar"><img src="/xoanen.png" alt="AI" /></div>
               <div>
                 <div className="ai-chat-title">Triết Gia AI</div>
                 <div className="ai-chat-status">Đang hoạt động</div>
@@ -3536,7 +3525,7 @@ function AiChat() {
           <div className="ai-chat-messages" id="ai-chat-messages">
             {messages.map((msg) => (
               <div key={msg.id} className={`ai-msg ai-msg-${msg.from}`}>
-                {msg.from === 'ai' && <div className="ai-msg-avatar"><img src="https://ava-grp-talk.zadn.vn/9/9/a/2/2/360/8d84b3493ccd55c45d27228da2ae5d7c.jpg" alt="AI" /></div>}
+                {msg.from === 'ai' && <div className="ai-msg-avatar"><img src="/xoanen.png" alt="AI" /></div>}
                 <div
                   className="ai-msg-bubble"
                   dangerouslySetInnerHTML={{
@@ -3547,11 +3536,19 @@ function AiChat() {
                 />
               </div>
             ))}
+            {loading && (
+              <div className="ai-msg ai-msg-ai">
+                <div className="ai-msg-avatar"><img src="" alt="AI" /></div>
+                <div className="ai-msg-bubble ai-typing-bubble">
+                  <span className="ai-typing-dot" /><span className="ai-typing-dot" /><span className="ai-typing-dot" />
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="ai-quick-questions">
             {quickQuestions.map((q) => (
-              <button key={q} className="ai-quick-btn" onClick={() => send(q)}>
+              <button key={q} className="ai-quick-btn" onClick={() => send(q)} disabled={loading}>
                 {q}
               </button>
             ))}
@@ -3561,13 +3558,16 @@ function AiChat() {
             <input
               className="ai-chat-input"
               type="text"
-              placeholder="Nhập câu hỏi..."
+              placeholder={loading ? 'Đang trả lời...' : 'Nhập câu hỏi...'}
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); send(input) } }}
+              disabled={loading}
               autoFocus
             />
-            <button className="ai-chat-send" onClick={() => send(input)} aria-label="Gửi">➤</button>
+            <button className="ai-chat-send" onClick={() => send(input)} aria-label="Gửi" disabled={loading}>
+              {loading ? '⏳' : '➤'}
+            </button>
           </div>
         </div>
       )}
